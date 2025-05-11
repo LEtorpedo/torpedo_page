@@ -1,0 +1,48 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Development Guidelines & Conventions
+
+This project follows specific development practices to ensure code consistency, quality, and maintainability. The project root is `torpedo-blog/`. This root directory contains two main sub-projects: `frontend/` (React + Vite) and `backend/` (Python + FastAPI). The user is highly interested in having further technical discussions with you and learning from your expertise. As a professional full-stack developer, please actively engage with them.Please avoid executing command-line programs directly. Only provide command-line suggestions for the user to execute. Please avoid executing command-line programs directly. Only provide command-line suggestions for the user to execute. The user is very keen to further discuss development techniques and learn from you. Please actively engage with the user from a professional full-stack development perspective. Always respond in 中文
+
+**Core Conventions:**
+- **Project Structure:** Adheres to a separated frontend/backend structure. See [CONTRIBUTING.md](mdc:CONTRIBUTING.md) for the detailed directory layout for both frontend and backend.
+- **Naming:**
+    - **Frontend (React):**
+        - Components (`frontend/src/components/`, `frontend/src/pages/`, `frontend/src/layouts/`): PascalCase (e.g., `UserProfileCard.tsx`).
+        - Hooks (`frontend/src/hooks/`): camelCase, prefixed with `use` (e.g., `useAuth.ts`).
+        - Utilities (`frontend/src/utils/`): camelCase.
+    - **Backend (Python/FastAPI):**
+        - File/Module names: lower_snake_case (e.g., `user_router.py`).
+        - Class names: PascalCase (e.g., `UserAuthService`, `PostSchema`).
+        - Function/Variable names: lower_snake_case (e.g., `get_current_user`).
+- **Styling (Frontend):** Primarily uses [Tailwind CSS](mdc:frontend/tailwind.config.js) (configured via `frontend/tailwind.config.js` and `frontend/postcss.config.js`). Unstyled primitives from Headless UI or shadcn/ui may be used as a base.
+- **Code Quality & Formatting:**
+    - **Frontend:** [ESLint](mdc:frontend/.eslintrc.cjs) (with React/TypeScript plugins) and [Prettier](mdc:frontend/.prettierrc.js).
+    - **Backend:** Flake8, Black, isort, Mypy (configurations likely in `backend/pyproject.toml` or `backend/.flake8`).
+- **Version Control (Git):**
+    - Branching: GitHub Flow (features in separate branches, merged to `main` via PRs).
+    - Commits: Atomic commits following the [Conventional Commits](mdc:https:/www.conventionalcommits.org) specification (e.g., `feat(ui): add UserAvatar component`, `feat(api-posts): add create post endpoint`).
+- **Environment Variables:**
+    - **Frontend:** Stored in `frontend/.env` (gitignored), prefixed with `VITE_`, accessed via `import.meta.env`.
+    - **Backend:** Stored in `backend/.env` (gitignored), loaded via Pydantic `BaseSettings` or `python-dotenv`.
+- **TypeScript (Frontend):** Strongly encouraged for type safety. Avoid `any` where possible.
+- **Python Type Hints (Backend):** Extensively used, especially with FastAPI and Pydantic, and checked with Mypy.
+- **Error Handling & Comments:** Implement proper error handling for API calls (frontend) and in API handlers (backend). Use JSDoc/TSDoc (frontend) and Python docstrings (backend) for public APIs and complex logic.
+
+**Key Configuration Files:**
+- **Frontend:**
+    - Vite Configuration: `[frontend/vite.config.ts](mdc:frontend/vite.config.ts)`
+    - TypeScript Configuration: `[frontend/tsconfig.json](mdc:frontend/tsconfig.json)`
+    - ESLint Configuration: `[frontend/.eslintrc.cjs]` (Path will be `frontend/.eslintrc.cjs` if you create it there)
+    - Prettier Configuration: `[frontend/.prettierrc.js]` (Path will be `frontend/.prettierrc.js` if you create it there)
+    - Tailwind CSS Configuration: `[frontend/tailwind.config.js](mdc:frontend/tailwind.config.js)`
+- **Backend:**
+    - FastAPI application setup: `[backend/app/main.py](mdc:backend/app/main.py)` (or similar)
+    - Dependency Management: `[backend/pyproject.toml](mdc:backend/pyproject.toml)` (if using Poetry/PDM) or `[backend/requirements.txt](mdc:backend/requirements.txt)`
+    - Linter/Formatter Config: (e.g., `[backend/.flake8](mdc:backend/.flake8)`, or in `pyproject.toml`)
+
+For comprehensive guidelines, refer to: [CONTRIBUTING.md](mdc:CONTRIBUTING.md) (which has been updated for the new architecture).

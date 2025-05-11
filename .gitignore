@@ -9,7 +9,7 @@ frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
 frontend/pnpm-debug.log*
-frontend/package-lock.json # 如果您使用 npm 并且不希望锁定版本，但通常建议提交
+# frontend/package-lock.json # 通常建议提交，如果您使用 npm，请取消注释或移除此行以跟踪它
 frontend/yarn.lock          # 如果您使用 yarn
 frontend/pnpm-lock.yaml     # 如果您使用 pnpm
 
@@ -61,7 +61,7 @@ dist/
 out/
 
 # Cursor-specific (if not desired in repo)
-.cursor/
+# .cursor/ # 建议跟踪此目录以同步 AI 助手规则
 
 # Temporary files
 *.tmp

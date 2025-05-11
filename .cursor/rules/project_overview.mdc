@@ -1,0 +1,32 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Project Overview & Design Goals
+
+This project aims to build a modern, aesthetically pleasing personal homepage and blog using a **React frontend and a Python (FastAPI) backend**. It will also serve as a platform for personal tools, with some features requiring user login.
+
+**Core Technologies:**
+- **Frontend Framework:** React (with Vite for tooling)
+- **Frontend UI Styling:** [Tailwind CSS](mdc:frontend/tailwind.config.js)
+- **Frontend UI Components:** Primarily custom components built with Tailwind CSS, potentially leveraging Headless UI and/or shadcn/ui for unstyled, accessible primitives.
+- **Backend Framework:** Python with FastAPI
+- **Database:** SQLite (initially, for local development and deployment)
+- **Content:** Markdown, served via the backend API and rendered client-side by React.
+
+**Key Pages & Features:**
+*(High-level features remain; implementation details reflect the new React/FastAPI architecture. Refer to `[design.md](mdc:design.md)` for specifics)*
+- **Homepage:** Bento Grid layout, Hero section (visual effects via React libraries or custom CSS/JS), sections for self-intro, project highlights, latest articles, and social links (all built with React components and Tailwind CSS).
+- **Blog (List & Detail):** Custom React components for article previews. Detail pages will fetch Markdown from the backend API, render it using a React Markdown library, and include features like reading progress indicators and tags.
+- **Academic Homepage:** Professional, information-centric design, built with React components and Tailwind CSS.
+- **Admin Panel / Personal Workbench:** Secure area for managing blog content (CRUD for posts, categories, tags via FastAPI backend) and integrated personal tools (e.g., RSS reader, To-Do list placeholders, also powered by the FastAPI backend). UI built with React components.
+
+**Design Principles:**
+- Modern, clean, and visually appealing with a focus on readability.
+- Strategic use of animations and effects for enhancement, not distraction (leveraging React ecosystem libraries or custom solutions).
+- Emphasis on a good user experience and performance.
+- Font preference: Clean, modern sans-serif like Inter.
+
+For complete details, refer to the full design document: `[design.md](mdc:design.md)` (which has been updated).
