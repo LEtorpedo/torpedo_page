@@ -1,0 +1,1303 @@
+TITLE: Form Setup with React Hook Form
+DESCRIPTION: Implementation of form setup using useForm hook with Zod validation.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/form.mdx#2025-04-21_snippet_5
+
+LANGUAGE: tsx
+CODE:
+```
+"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+const formSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+})
+
+export function ProfileForm() {
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({ 
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+    },
+  })
+
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values)
+  }
+}
+```
+
+----------------------------------------
+
+TITLE: Implementing DataTable Component with Row Selection in React
+DESCRIPTION: A React component that implements a data table with sorting, filtering, pagination, column visibility, and row selection functionality using React Table.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/data-table.mdx#2025-04-21_snippet_12
+
+LANGUAGE: tsx
+CODE:
+```
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
+
+  const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  })
+
+  return (
+    <div>
+      <div className="rounded-md border">
+        <Table />
+      </div>
+    </div>
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Configure Global Styles (globals.css)
+DESCRIPTION: Configures global styles in the `globals.css` file, importing Tailwind CSS and tw-animate-css, defining custom variants for dark mode, and setting CSS variables for theming. The code block includes theme definitions for both light and dark modes.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/installation/manual.mdx#_snippet_2
+
+LANGUAGE: css
+CODE:
+```
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+```
+
+----------------------------------------
+
+TITLE: Complete Form Implementation
+DESCRIPTION: Full example of a form implementation with all components and validation.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/form.mdx#2025-04-21_snippet_6
+
+LANGUAGE: tsx
+CODE:
+```
+"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+
+const formSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+})
+
+export function ProfileForm() {
+  // ...
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="shadcn" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Importing useToast Hook
+DESCRIPTION: How to import the useToast hook to display toast notifications in your components.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/toast.mdx#2025-04-22_snippet_4
+
+LANGUAGE: tsx
+CODE:
+```
+import { useToast } from "@/hooks/use-toast"
+```
+
+----------------------------------------
+
+TITLE: Implementing Row Selection in React Table
+DESCRIPTION: This snippet shows how to add row selection functionality to the DataTable. It includes updating the column definitions to include a selection checkbox for each row and the header.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/data-table.mdx#2025-04-21_snippet_11
+
+LANGUAGE: tsx
+CODE:
+```
+"use client"
+
+import { ColumnDef } from "@tanstack/react-table"
+
+import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
+
+export const columns: ColumnDef<Payment>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+]
+```
+
+----------------------------------------
+
+TITLE: Basic Form Structure with React Hook Form
+DESCRIPTION: Demonstrates the basic anatomy of a form using the Form and FormField components with React Hook Form.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/form.mdx#2025-04-21_snippet_0
+
+LANGUAGE: tsx
+CODE:
+```
+<Form>
+  <FormField
+    control={...}
+    name="..."
+    render={() => (
+      <FormItem>
+        <FormLabel />
+        <FormControl>
+          { /* Your form field */}
+        </FormControl>
+        <FormDescription />
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+</Form>
+```
+
+----------------------------------------
+
+TITLE: Implementing Pagination in React Table Component
+DESCRIPTION: This snippet shows how to add pagination to a DataTable component using @tanstack/react-table. It includes setting up the table instance with pagination model and adding pagination controls.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/data-table.mdx#2025-04-21_snippet_7
+
+LANGUAGE: tsx
+CODE:
+```
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  })
+
+  // ...
+}
+```
+
+LANGUAGE: tsx
+CODE:
+```
+import { Button } from "@/components/ui/button"
+
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  })
+
+  return (
+    <div>
+      <div className="rounded-md border">
+        <Table>
+          { // .... }
+        </Table>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div>
+    </div>
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Implementing ThemeProvider in Next.js root layout
+DESCRIPTION: Demonstrates how to wrap the root layout with the ThemeProvider component. It also adds the suppressHydrationWarning prop to the html tag to prevent hydration warnings related to theme changes.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/dark-mode/next.mdx#2025-04-21_snippet_2
+
+LANGUAGE: tsx
+CODE:
+```
+import { ThemeProvider } from "@/components/theme-provider"
+
+export default function RootLayout({ children }: RootLayoutProps) {
+  return (
+    <>
+      <html lang="en" suppressHydrationWarning>
+        <head />
+        <body>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </>
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Implementing Filtering in React Table Component
+DESCRIPTION: This snippet shows how to add filtering capabilities to the DataTable. It includes updating the table instance with column filters state and model, and adding a search input for email filtering.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/data-table.mdx#2025-04-21_snippet_9
+
+LANGUAGE: tsx
+CODE:
+```
+"use client"
+
+import * as React from "react"
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
+
+  const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+    },
+  })
+
+  return (
+    <div>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter emails..."
+          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("email")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
+      <div className="rounded-md border">
+        <Table>{ ... }</Table>
+      </div>
+    </div>
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Initializing shadcn Project with CLI
+DESCRIPTION: Use the 'init' command to initialize configuration and dependencies for a new project. This command installs dependencies, adds the 'cn' util, and configures CSS variables.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/cli.mdx#2025-04-21_snippet_0
+
+LANGUAGE: bash
+CODE:
+```
+npx shadcn@latest init
+```
+
+----------------------------------------
+
+TITLE: Defining Slate Theme Color Variables in CSS
+DESCRIPTION: This CSS defines a complete color theme system with light and dark mode variables using the OKLCH color space. It includes variables for background, foreground, interactive elements (cards, popovers), state indicators (primary, secondary, accent), as well as specialized variables for charts and sidebar components.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/theming.mdx#2025-04-21_snippet_7
+
+LANGUAGE: css
+CODE:
+```
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.129 0.042 264.695);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.129 0.042 264.695);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.129 0.042 264.695);
+  --primary: oklch(0.208 0.042 265.755);
+  --primary-foreground: oklch(0.984 0.003 247.858);
+  --secondary: oklch(0.968 0.007 247.896);
+  --secondary-foreground: oklch(0.208 0.042 265.755);
+  --muted: oklch(0.968 0.007 247.896);
+  --muted-foreground: oklch(0.554 0.046 257.417);
+  --accent: oklch(0.968 0.007 247.896);
+  --accent-foreground: oklch(0.208 0.042 265.755);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.929 0.013 255.508);
+  --input: oklch(0.929 0.013 255.508);
+  --ring: oklch(0.704 0.04 256.788);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.984 0.003 247.858);
+  --sidebar-foreground: oklch(0.129 0.042 264.695);
+  --sidebar-primary: oklch(0.208 0.042 265.755);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.968 0.007 247.896);
+  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
+  --sidebar-border: oklch(0.929 0.013 255.508);
+  --sidebar-ring: oklch(0.704 0.04 256.788);
+}
+
+.dark {
+  --background: oklch(0.129 0.042 264.695);
+  --foreground: oklch(0.984 0.003 247.858);
+  --card: oklch(0.208 0.042 265.755);
+  --card-foreground: oklch(0.984 0.003 247.858);
+  --popover: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.929 0.013 255.508);
+  --primary-foreground: oklch(0.208 0.042 265.755);
+  --secondary: oklch(0.279 0.041 260.031);
+  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --muted: oklch(0.279 0.041 260.031);
+  --muted-foreground: oklch(0.704 0.04 256.788);
+  --accent: oklch(0.279 0.041 260.031);
+  --accent-foreground: oklch(0.984 0.003 247.858);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.551 0.027 264.364);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.208 0.042 265.755);
+  --sidebar-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.279 0.041 260.031);
+  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.551 0.027 264.364);
+}
+```
+
+----------------------------------------
+
+TITLE: Adding Column Visibility Control to React Table
+DESCRIPTION: This snippet demonstrates how to implement column visibility control in the DataTable. It includes updating the table instance with visibility state and adding a dropdown menu for toggling column visibility.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/data-table.mdx#2025-04-21_snippet_10
+
+LANGUAGE: tsx
+CODE:
+```
+"use client"
+
+import * as React from "react"
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({})
+
+  const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+    },
+  })
+
+  return (
+    <div>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter emails..."
+          value={table.getColumn("email")?.getFilterValue() as string}
+          onChange={(event) =>
+            table.getColumn("email")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Columns
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter(
+                (column) => column.getCanHide()
+              )
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                )
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className="rounded-md border">
+        <Table>{ ... }</Table>
+      </div>
+    </div>
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Adding Toaster Component to Layout
+DESCRIPTION: Code example showing how to integrate the Toaster component into the root layout of a React application, which is necessary to display toast notifications.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/sonner.mdx#2025-04-21_snippet_1
+
+LANGUAGE: tsx
+CODE:
+```
+import { Toaster } from "@/components/ui/sonner"
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <head />
+      <body>
+        <main>{children}</main>
+        <Toaster />
+      </body>
+    </html>
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Creating a ThemeProvider component in Next.js
+DESCRIPTION: Defines a ThemeProvider component that wraps the NextThemesProvider from next-themes. This component will be used to provide theme context to the application.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/dark-mode/next.mdx#2025-04-21_snippet_1
+
+LANGUAGE: tsx
+CODE:
+```
+"use client"
+
+import * as React from "react"
+import { ThemeProvider as NextThemesProvider } from "next-themes"
+
+export function ThemeProvider({
+  children,
+  ...props
+}: React.ComponentProps<typeof NextThemesProvider>) {
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+}
+```
+
+----------------------------------------
+
+TITLE: Adding Sorting Functionality to React Table
+DESCRIPTION: This snippet demonstrates how to implement sorting in the DataTable component. It includes updating the table instance with sorting state and model, and making a header cell sortable.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/data-table.mdx#2025-04-21_snippet_8
+
+LANGUAGE: tsx
+CODE:
+```
+"use client"
+
+import * as React from "react"
+import {
+  ColumnDef,
+  SortingState,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
+  })
+
+  return (
+    <div>
+      <div className="rounded-md border">
+        <Table>{ ... }</Table>
+      </div>
+    </div>
+  )
+}
+```
+
+LANGUAGE: tsx
+CODE:
+```
+"use client"
+
+import { ColumnDef } from "@tanstack/react-table"
+import { ArrowUpDown } from "lucide-react"
+
+export const columns: ColumnDef<Payment>[] = [
+  {
+    accessorKey: "email",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Email
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+  },
+]
+```
+
+----------------------------------------
+
+TITLE: Defining Payment Data Type and Sample Data in TypeScript
+DESCRIPTION: Defines the Payment type and provides sample payment data for the table.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/data-table.mdx#2025-04-21_snippet_0
+
+LANGUAGE: tsx
+CODE:
+```
+type Payment = {
+  id: string
+  amount: number
+  status: "pending" | "processing" | "success" | "failed"
+  email: string
+}
+
+export const payments: Payment[] = [
+  {
+    id: "728ed52f",
+    amount: 100,
+    status: "pending",
+    email: "m@example.com",
+  },
+  {
+    id: "489e1d42",
+    amount: 125,
+    status: "processing",
+    email: "example@gmail.com",
+  },
+  // ...
+]
+```
+
+----------------------------------------
+
+TITLE: Creating a Reusable DataTable Component with TanStack Table
+DESCRIPTION: Implements a reusable DataTable component using TanStack Table and shadcn/ui Table components.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/data-table.mdx#2025-04-21_snippet_3
+
+LANGUAGE: tsx
+CODE:
+```
+"use client"
+
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+}
+
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
+
+  return (
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                )
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Initializing shadcn/ui in Next.js Project
+DESCRIPTION: Command to create a new Next.js project or configure an existing one with shadcn/ui. This command launches an interactive setup process where you can choose between a standalone Next.js project or a Monorepo setup.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/installation/next.mdx#2025-04-21_snippet_0
+
+LANGUAGE: bash
+CODE:
+```
+npx shadcn@latest init
+```
+
+----------------------------------------
+
+TITLE: Implementing Theme Toggle Component
+DESCRIPTION: Creates a dropdown menu component for toggling between light, dark, and system themes. Includes animated icons and accessibility features.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/dark-mode/vite.mdx#2025-04-21_snippet_2
+
+LANGUAGE: tsx
+CODE:
+```
+import { Moon, Sun } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useTheme } from "@/components/theme-provider"
+
+export function ModeToggle() {
+  const { setTheme } = useTheme()
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon">
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+```
+
+----------------------------------------
+
+TITLE: Configuring Tailwind Content Paths
+DESCRIPTION: Tailwind configuration to include registry components in the build process.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/registry/getting-started.mdx#2025-04-21_snippet_2
+
+LANGUAGE: ts
+CODE:
+```
+// tailwind.config.ts
+export default {
+  content: ["./registry/**/*.{js,ts,jsx,tsx}"],
+}
+```
+
+----------------------------------------
+
+TITLE: Basic Select Component Implementation
+DESCRIPTION: Example implementation of a theme selector using the Select component with Light, Dark, and System options.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/select.mdx#2025-04-21_snippet_3
+
+LANGUAGE: tsx
+CODE:
+```
+<Select>
+  <SelectTrigger className="w-[180px]">
+    <SelectValue placeholder="Theme" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="light">Light</SelectItem>
+    <SelectItem value="dark">Dark</SelectItem>
+    <SelectItem value="system">System</SelectItem>
+  </SelectContent>
+</Select>
+```
+
+----------------------------------------
+
+TITLE: Using Drawer Component in React
+DESCRIPTION: Example of using the Drawer component with its sub-components in a React application. It demonstrates how to structure a drawer with a trigger, content, header, footer, and close button.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/drawer.mdx#2025-04-21_snippet_3
+
+LANGUAGE: tsx
+CODE:
+```
+<Drawer>
+  <DrawerTrigger>Open</DrawerTrigger>
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+      <DrawerDescription>This action cannot be undone.</DrawerDescription>
+    </DrawerHeader>
+    <DrawerFooter>
+      <Button>Submit</Button>
+      <DrawerClose>
+        <Button variant="outline">Cancel</Button>
+      </DrawerClose>
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>
+```
+
+----------------------------------------
+
+TITLE: Style Configuration - JSON
+DESCRIPTION: Configuration for setting the component style theme. This setting cannot be changed after initialization.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components-json.mdx#2025-04-21_snippet_2
+
+LANGUAGE: json
+CODE:
+```
+{
+  "style": "new-york"
+}
+```
+
+----------------------------------------
+
+TITLE: Form Field Implementation Example
+DESCRIPTION: Shows a practical example of implementing a username form field with React Hook Form.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/form.mdx#2025-04-21_snippet_1
+
+LANGUAGE: tsx
+CODE:
+```
+const form = useForm()
+
+<FormField
+  control={form.control}
+  name="username"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Username</FormLabel>
+      <FormControl>
+        <Input placeholder="shadcn" {...field} />
+      </FormControl>
+      <FormDescription>This is your public display name.</FormDescription>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+```
+
+----------------------------------------
+
+TITLE: Creating Theme Provider Context in React
+DESCRIPTION: Implements a ThemeProvider component using React Context to manage theme state (dark/light/system) with local storage persistence. Includes a custom hook useTheme for accessing theme context throughout the application.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/dark-mode/vite.mdx#2025-04-21_snippet_0
+
+LANGUAGE: tsx
+CODE:
+```
+import { createContext, useContext, useEffect, useState } from "react"
+
+type Theme = "dark" | "light" | "system"
+
+type ThemeProviderProps = {
+  children: React.ReactNode
+  defaultTheme?: Theme
+  storageKey?: string
+}
+
+type ThemeProviderState = {
+  theme: Theme
+  setTheme: (theme: Theme) => void
+}
+
+const initialState: ThemeProviderState = {
+  theme: "system",
+  setTheme: () => null,
+}
+
+const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+
+export function ThemeProvider({
+  children,
+  defaultTheme = "system",
+  storageKey = "vite-ui-theme",
+  ...props
+}: ThemeProviderProps) {
+  const [theme, setTheme] = useState<Theme>(
+    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+  )
+
+  useEffect(() => {
+    const root = window.document.documentElement
+
+    root.classList.remove("light", "dark")
+
+    if (theme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light"
+
+      root.classList.add(systemTheme)
+      return
+    }
+
+    root.classList.add(theme)
+  }, [theme])
+
+  const value = {
+    theme,
+    setTheme: (theme: Theme) => {
+      localStorage.setItem(storageKey, theme)
+      setTheme(theme)
+    },
+  }
+
+  return (
+    <ThemeProviderContext.Provider {...props} value={value}>
+      {children}
+    </ThemeProviderContext.Provider>
+  )
+}
+
+export const useTheme = () => {
+  const context = useContext(ThemeProviderContext)
+
+  if (context === undefined)
+    throw new Error("useTheme must be used within a ThemeProvider")
+
+  return context
+}
+```
+
+----------------------------------------
+
+TITLE: Defining Column Definitions for Payment Data Table
+DESCRIPTION: Creates column definitions for the Payment data table using TanStack Table's ColumnDef.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/data-table.mdx#2025-04-21_snippet_2
+
+LANGUAGE: tsx
+CODE:
+```
+"use client"
+
+import { ColumnDef } from "@tanstack/react-table"
+
+// This type is used to define the shape of our data.
+// You can use a Zod schema here if you want.
+export type Payment = {
+  id: string
+  amount: number
+  status: "pending" | "processing" | "success" | "failed"
+  email: string
+}
+
+export const columns: ColumnDef<Payment>[] = [
+  {
+    accessorKey: "status",
+    header: "Status",
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+  },
+  {
+    accessorKey: "amount",
+    header: "Amount",
+  },
+]
+```
+
+----------------------------------------
+
+TITLE: Defining Advanced Chart Configuration with Icons in TypeScript
+DESCRIPTION: This snippet shows an advanced chart configuration object that includes labels, icons, and theme-specific colors. It demonstrates how to use the ChartConfig type for type safety.
+SOURCE: https://github.com/shadcn-ui/ui/blob/main/apps/www/content/docs/components/chart.mdx#2025-04-21_snippet_4
+
+LANGUAGE: tsx
+CODE:
+```
+import { Monitor } from "lucide-react"
+
+import { type ChartConfig } from "@/components/ui/chart"
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    icon: Monitor,
+    // A color like 'hsl(220, 98%, 61%)' or 'var(--color-name)'
+    color: "#2563eb",
+    // OR a theme object with 'light' and 'dark' keys
+    theme: {
+      light: "#2563eb",
+      dark: "#dc2626",
+    },
+  },
+} satisfies ChartConfig
+```
