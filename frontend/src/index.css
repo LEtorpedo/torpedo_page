@@ -1,1 +1,39 @@
 @import "tailwindcss";
+
+:root {
+  --particle-color: #4A5568; /* 默认粒子颜色 */
+  font-family: theme('fontFamily.serif'); /* Apply serif font globally */
+}
+
+/* 未来实现暗黑模式时，可以这样覆盖： */
+/*
+.dark-theme {
+  --particle-color: #2D3748; // 示例：暗黑模式下的粒子颜色
+}
+*/
+
+/* Noto Serif - For Latin scripts */
+@font-face {
+  font-family: 'Noto Serif';
+  src: url('./assets/fonts/noto-serif/NotoSerif-VariableFont_wdth,wght.woff2') format('woff2-variations');
+  font-weight: 100 900; /* Variable font weight range */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Serif';
+  src: url('./assets/fonts/noto-serif/NotoSerif-Italic-VariableFont_wdth,wght.woff2') format('woff2-variations');
+  font-weight: 100 900; /* Variable font weight range */
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Noto Serif SC - For Simplified Chinese */
+@font-face {
+  font-family: 'Noto Serif SC';
+  src: url('./assets/fonts/noto-serif-sc/NotoSerifSC-VariableFont_wght.woff2') format('woff2-variations');
+  font-weight: 100 900; /* Variable font weight range */
+  font-style: normal;
+  font-display: swap;
+}
