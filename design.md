@@ -10,10 +10,10 @@
 ### 1.2. 技术选型
 
 - **前端框架:** React (使用 Vite 作为构建工具)
-- **后端框架:** (待定 - 将独立选型，例如 Node.js/Express, Python/FastAPI 等)
+- **后端框架:** (Python/FastAPI)
 - **主要 UI 构建方式:** Tailwind CSS
 - **辅助 UI 组件:** Headless UI / shadcn/ui (提供无样式或轻度样式的功能组件，通过 Tailwind CSS 自定义)
-- **补充效果库:** (视情况选择 React 生态中的库或自行实现，原 Inspira UI 需重新评估)
+- **补充效果库:** (视情况选择 React 生态中的库或自行实现，目前可以使用Magic UI)
 - **CSS 方案:** Tailwind CSS - 作为主要的样式方案。
 - **内容格式:** Markdown (内容将通过后端 API 提供，前端负责渲染)。
 
@@ -27,7 +27,7 @@
     *   **Headless UI (React):** 提供完全无样式、功能齐全、可访问性良好的 UI 组件作为基础。
     *   **shadcn/ui:** 借鉴或直接使用其基于 Radix UI 和 Tailwind CSS 构建的可复用组件代码。
     *   以上两者结合，允许我们最大限度地控制组件的外观和行为，同时保证可访问性和功能性。
-4.  **补充视觉效果:** 对于特定的高级视觉效果（如主页 Hero 区域的粒子背景、交互式悬停按钮，特定卡片效果等），将寻找 React 生态中合适的开源库或考虑基于 CSS/JavaScript 自行实现，同时关注性能影响。原设计中提及的 Inspira UI 组件需要评估其是否有 React 版本或寻找替代方案。
+4.  **补充视觉效果:** 对于特定的高级视觉效果（如主页 Hero 区域的粒子背景、交互式悬停按钮，特定卡片效果等），将寻找 React 生态中合适的开源库或考虑基于 CSS/JavaScript 自行实现，同时关注性能影响。目前可以使用magicui。
 5.  **自定义组件:** 对于标准库未提供或需要高度定制的复杂组件，将基于 React 和 Tailwind CSS 进行自定义开发。
 6.  **动态效果:** 优先使用 CSS 过渡和动画，复杂交互可编写自定义 JavaScript/TypeScript (React Hooks)。
 
@@ -38,7 +38,7 @@
 ### 2.1. 视觉风格
 
 - 倾向于现代感、科技感，同时注重信息的可读性与页面的简洁性。
-- **字体:** 优先选用干净、现代且高可读性的无衬线字体 (如 Inter 或类似风格字体) 作为主要内容和 UI 字体。
+- **字体:** 优先选用干净、现代且高可读性的无衬线字体 (如 Inter 或类似风格字体) 作为主要内容和 UI 字体。我们正式选用了noto-serif字体。
 - 灵活运用动效，但避免过度堆砌，优先考虑交互触发的动画。
 - 关注性能影响，特别是复杂背景和动画效果。
 
@@ -46,7 +46,7 @@
 
 本项目致力于实现现代且具吸引力的视觉效果。对于原设计中提及的特定效果（如粒子背景、特殊卡片、交互式按钮、阅读进度指示等），我们将采取以下策略：
 
-- **寻找 React 生态中的优秀库:** 积极探索和选用 React 生态中成熟的动画与视觉效果库，例如 Framer Motion, React Spring, tsParticles (用于粒子效果) 等，或针对特定需求的专用库。
+- **寻找 React 生态中的优秀库:** 积极探索和选用 React 生态中成熟的动画与视觉效果库，例如 Framer Motion, React Spring, tsParticles (用于粒子效果) 等，或针对特定需求的专用库。我们找到了Inspira UI的react实现，Magic UI。
 - **自定义实现:** 对于某些独特效果，可能会结合使用 Tailwind CSS、原生 CSS 动画/过渡以及 JavaScript (React Hooks) 进行自定义实现。
 - **性能优先:** 所有视觉效果的选择和实现都将严格评估其对性能的影响，确保用户体验流畅。
 
@@ -58,9 +58,8 @@
 
 - **布局:** 主要采用 `Bento Grid` 布局概念 (使用 Tailwind CSS Grid/Flexbox 实现)。
 - **Hero Section (格子内或跨格):** 
-    - **内容:** 座右铭 "随心" (使用 `<h1>` 标签，并应用自定义 CSS 动画 `subtle-glow` 实现呼吸光晕效果)。
+    - **内容:** 座右铭《定风波》。
     - **背景:** 将采用合适的 React 库 (如 tsParticles) 或自定义方案实现粒子背景效果。
-    - **按钮:** 主要 CTA 按钮将作为自定义 React 组件实现，可能应用 React 动画库实现交互悬停效果；次要按钮/链接使用标准的自定义 React 按钮组件。
 - **Bento Grid 内容 (格子建议使用自定义的 `Card` React 组件或 `div` + Tailwind):**
     - **自我介绍格:** 短简介 (`<p>`), 头像 (自定义 `Avatar` React 组件)。
     - **项目精选格:** 使用自定义的 `Card` React 组件，并应用 React 动画库或 CSS 实现类似 3D 或 Glare 的卡片效果，内含标题、简述、链接按钮 (自定义 React 按钮组件)。
@@ -159,6 +158,19 @@
 - **核心:** 集成强大的 Markdown 编辑器 (React 版本，如 `Milkdown`, `BlockNote`, `TipTap` 或其他支持 Markdown 的富文本编辑器)。
 - **元数据管理:** 结合 React 表单库 (如 `React Hook Form`) 和自定义 React 输入组件 (基于 Headless UI 或 shadcn/ui 的 input, select, textarea 等) 管理文章元数据。
 - **体验优化:** 宽敞布局 (全屏/收起侧边栏选项), 实时预览, 图片上传集成, 自动保存等。
+
+### 4.3.1. (新增) 支持可自定义样式的动态文本内容
+
+- **目标:** 对于某些动态文本内容（例如首页"当前状态"卡片的描述），后台应能更灵活地控制其展示样式，包括但不限于部分文本使用特殊字体（如花体）、颜色或强调效果。
+- **后台实现思路:** 
+    - **推荐方案 (结构化数据):** 后台 API 提供结构化的文本片段数据，每个片段可包含文本内容和预定义的样式键 (如 `style_key: "cursive_main"` 或 `style_key: "highlight_color"`)。
+    - **编辑器支持:** 管理后台的编辑器（特别是富文本编辑器如 TipTap）应支持用户选择文本并应用这些预定义的样式标记。编辑器输出结构化的 JSON 数据。
+- **前端实现思路:**
+    - **样式映射:** 前端维护一个样式键到具体 CSS 样式的映射表（例如，`"cursive_main"` 对应 `fontFamily: '"Dancing Script Custom", cursive'`）。
+    - **动态渲染:** 前端根据从 API 获取的结构化数据和样式键，动态构建并渲染相应的 React 元素（如 `<span>` 包裹并应用样式）。
+- **字体管理:** 
+    - 对于后台可选的特殊字体，需要在前端项目中引入相应的字体文件 (如 `.woff2`)并通过 `@font-face` 规则定义。
+    - 后台编辑器中提供的"字体选择"或"样式选择"应对应前端已定义好的、可用的样式键。
 
 ### 4.4. 列表视图 & 管理界面
 
@@ -348,18 +360,4 @@ type TodoItem = {
 - **CSRF 防护**: 若使用基于 Cookie 的会话管理，需实施有效的 CSRF 防护策略 (如使用 `nuxt-security` 模块提供的功能或同步器模式 Token)。
 
 ## 5. 依赖管理与维护
-- **定期更新**: 定期审查并更新项目依赖（`package.json`），及时修复已知的安全漏洞。可使用 `npm audit` 或 `yarn audit` 等工具辅助检查。
-- **谨慎引入新依赖**: 评估新依赖的安全性、社区活跃度和维护状况。
-
-## 6. HTTP 安全头部
-- 考虑配置重要的 HTTP 安全头部，如：
-    - `Content-Security-Policy (CSP)`: 限制浏览器加载资源的来源。
-    - `X-Content-Type-Options: nosniff`
-    - `X-Frame-Options: DENY` 或 `SAMEORIGIN`
-    - `Strict-Transport-Security (HSTS)` (在 HTTPS 稳定运行后)
-- 可考虑使用 `nuxt-security` 模块简化配置，并致力于配置**严格且具体**的 `Content-Security-Policy` (CSP) 策略。
-
-## 7. 服务器端安全
-- 虽然本项目初期可能部署于 Serverless 平台，但仍需注意服务器端代码（`server/api/`, `server/middleware/`）的安全性，防止注入、未授权访问等问题。
-
-这些安全考虑将在项目开发的全生命周期中得到关注和实施。
+- **定期更新**: 定期审查并更新项目依赖（`package.json`），及时修复已知的安全漏洞。可使用 `

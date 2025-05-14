@@ -1,1 +1,152 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --particle-color: #4A5568; /* 默认粒子颜色 */
+  font-family: theme('fontFamily.serif'); /* Apply serif font globally */ --radius: 0.625rem; --background: oklch(1 0 0); --foreground: oklch(0.129 0.042 264.695); --card: oklch(1 0 0); --card-foreground: oklch(0.129 0.042 264.695); --popover: oklch(1 0 0); --popover-foreground: oklch(0.129 0.042 264.695); --primary: oklch(0.208 0.042 265.755); --primary-foreground: oklch(0.984 0.003 247.858); --secondary: oklch(0.968 0.007 247.896); --secondary-foreground: oklch(0.208 0.042 265.755); --muted: oklch(0.968 0.007 247.896); --muted-foreground: oklch(0.554 0.046 257.417); --accent: oklch(0.968 0.007 247.896); --accent-foreground: oklch(0.208 0.042 265.755); --destructive: oklch(0.577 0.245 27.325); --destructive-foreground: oklch(0.85 0.15 28); --border: oklch(0.929 0.013 255.508); --input: oklch(0.929 0.013 255.508); --ring: oklch(0.704 0.04 256.788); --chart-1: oklch(0.646 0.222 41.116); --chart-2: oklch(0.6 0.118 184.704); --chart-3: oklch(0.398 0.07 227.392); --chart-4: oklch(0.828 0.189 84.429); --chart-5: oklch(0.769 0.188 70.08); --sidebar: oklch(0.984 0.003 247.858); --sidebar-foreground: oklch(0.129 0.042 264.695); --sidebar-primary: oklch(0.208 0.042 265.755); --sidebar-primary-foreground: oklch(0.984 0.003 247.858); --sidebar-accent: oklch(0.968 0.007 247.896); --sidebar-accent-foreground: oklch(0.208 0.042 265.755); --sidebar-border: oklch(0.929 0.013 255.508); --sidebar-ring: oklch(0.704 0.04 256.788);
+
+  /* Custom Brand Colors */
+  --brand-primary: oklch(0.704 0.14 182.503);         /* Approx #14B8A6 (Teal 500) */
+  --brand-primary-foreground: oklch(1 0 0);         /* White */
+  --brand-primary-dark: oklch(0.65 0.145 182.5);     /* Approx #0D9488 (Teal 600) - for hover */
+  --brand-primary-light: oklch(0.75 0.135 182.5);    /* Approx #2DD4BF (Teal 400) - for focus ring */
+}
+
+/* 未来实现暗黑模式时，可以这样覆盖： */
+/*
+.dark-theme {
+  --particle-color: #2D3748; // 示例：暗黑模式下的粒子颜色
+}
+*/
+
+/* Noto Serif - For Latin scripts */
+@font-face {
+  font-family: 'Noto Serif';
+  src: url('./assets/fonts/noto-serif/NotoSerif-VariableFont_wdth,wght.woff2') format('woff2-variations');
+  font-weight: 100 900; /* Variable font weight range */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Serif';
+  src: url('./assets/fonts/noto-serif/NotoSerif-Italic-VariableFont_wdth,wght.woff2') format('woff2-variations');
+  font-weight: 100 900; /* Variable font weight range */
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Noto Serif SC - For Simplified Chinese */
+@font-face {
+  font-family: 'Noto Serif SC';
+  src: url('./assets/fonts/noto-serif-sc/NotoSerifSC-VariableFont_wght.woff2') format('woff2-variations');
+  font-weight: 100 900; /* Variable font weight range */
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Dancing Script - For the special 'L' */
+@font-face {
+  font-family: 'Dancing Script Custom'; /* Custom name to avoid conflicts if Google Font version was ever imported */
+  src: url('./assets/fonts/dancing_script/DancingScript-VariableFont_wght.woff2') format('woff2-variations');
+  font-weight: 400 700; /* Dancing Script variable font typically supports this range */
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+.dark {
+  --background: oklch(0.129 0.042 264.695);
+  --foreground: oklch(0.984 0.003 247.858);
+  --card: oklch(0.208 0.042 265.755);
+  --card-foreground: oklch(0.984 0.003 247.858);
+  --popover: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.929 0.013 255.508);
+  --primary-foreground: oklch(0.208 0.042 265.755);
+  --secondary: oklch(0.279 0.041 260.031);
+  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --muted: oklch(0.279 0.041 260.031);
+  --muted-foreground: oklch(0.704 0.04 256.788);
+  --accent: oklch(0.279 0.041 260.031);
+  --accent-foreground: oklch(0.984 0.003 247.858);
+  --destructive: oklch(0.704 0.191 22.216); --destructive-foreground: oklch(0.5 0.17 23); --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.551 0.027 264.364);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.208 0.042 265.755);
+  --sidebar-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.279 0.041 260.031);
+  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.551 0.027 264.364);
+  }
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom base styles */
+html {
+  @apply bg-background; /* 确保 html 元素也使用主题背景色 */
+  min-height: 100%;
+  overflow-y: scroll;   /* 保持：防止滚动条显隐造成的布局位移 */
+}
+
+body {
+  min-height: 100%;     /* 保持：确保 body 也能撑满高度 */
+  /* 字体、文本颜色和 body 的背景色由 Tailwind 的 base 层和您在 :root 及 @layer base 中的主题设置处理 */
+}
+
+/* Further global styles can be added here */
