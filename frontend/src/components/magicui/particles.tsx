@@ -209,7 +209,7 @@ export const Particles: React.FC<ParticlesProps> = ({
       context.current.fill();
       context.current.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [dpr, rgb]);
 
   const clearContext = () => {
@@ -279,7 +279,7 @@ export const Particles: React.FC<ParticlesProps> = ({
       }
     });
     rafID.current = window.requestAnimationFrame(animate);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [drawCircle, vx, vy, staticity, ease, circleParams]);
 
   return (
