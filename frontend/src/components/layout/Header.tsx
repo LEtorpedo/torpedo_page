@@ -37,8 +37,8 @@ const Header: React.FC = () => {
   // Colors for links when header is transparent (homepage, not scrolled)
   const transparentHeaderLinkColors = 'text-white hover:bg-white/20 dark:hover:bg-white/20'; 
 
-  // Define active link classes using brand-primary and brand-primary-light
-  const activeLinkHighlightClasses = 'text-brand-primary dark:text-brand-primary-light font-semibold';
+  // Define active link classes using a standard Tailwind color
+  const activeLinkHighlightClasses = 'text-teal-400 font-semibold';
 
   const getLinkClassName = ({ isActive }: { isActive: boolean }) => {
     let dynamicColors = '';
@@ -65,7 +65,7 @@ const Header: React.FC = () => {
   const getIconLinkClassName = ({ isActive }: { isActive: boolean }) => {
     // For the icon, we might not want the font-semibold, so define its active state separately or adjust as needed.
     // Using the same text color for now.
-    const activeIconHighlightClasses = 'text-brand-primary dark:text-brand-primary-light';
+    const activeIconHighlightClasses = 'text-teal-400';
     return `${linkBaseStyles} ${
       effectiveIsScrolled // Use effectiveIsScrolled for icon styling
         ? `${solidHeaderLinkColors} ${isActive ? activeIconHighlightClasses : ''}`
@@ -82,7 +82,7 @@ const Header: React.FC = () => {
               to="/" 
               className={`text-xl font-bold ${
                 effectiveIsScrolled // Use effectiveIsScrolled for logo color
-                  ? 'text-brand-primary dark:text-brand-primary-light' // Logo uses primary colors when header has bg
+                  ? 'text-teal-400' // Logo uses teal-400 when header has bg. Dark mode part removed for simplicity for now.
                   : 'text-white'
               }`}
             >

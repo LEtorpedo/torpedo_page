@@ -8,7 +8,7 @@
     -   [x] `tailwind.config.js`, `postcss.config.js` 生成
     -   [x] 路径别名配置 (`@/`)
     -   [x] `index.css` 全局样式、字体加载 (Noto Serif, Noto Serif SC)
-    -   [x] **颜色系统整合** (确保 `tailwind.config.js` 中 `brand-*` 颜色与 `index.css` 协调，并支持 `dark:` 模式切换) - *完成*
+    -   [x] **颜色系统整合** (确保 `tailwind.config.js` 中 `brand-*` 颜色与 `index.css` 协调，并支持 `dark:` 模式切换) - *完成 (最终采用标准Tailwind颜色类解决自定义名称问题，暗黑模式颜色没弄)*
         -   [x] `tailwind.config.js` 已更新，包含 `brand-*` Hex 颜色及其 `dark` 版本。
         -   [x] 确认 `index.css` 中 `--destructive-foreground` CSS 变量已定义 (或从 tailwind config 中移除引用)。
     -   [x] `darkMode: 'class'` 配置
@@ -23,15 +23,15 @@
 ## 阶段二：核心布局与通用组件
 
 -   [x] **设计并实现站点整体布局 (Layouts)**
-    -   [x] `MainLayout.tsx` (页头 Header, 页脚 Footer, 内容区) - *页头部分为占位*
+    -   [x] `MainLayout.tsx` (页头 Header, 页脚 Footer, 内容区) 
     -   [ ] (可选) 侧边栏 (Sidebar) 布局
 -   [ ] **实现通用 UI 组件**
     -   [ ] 按钮 (Button)
     -   [ ] 输入框 (Input)
     -   [ ] 卡片 (Card) - (Bento Grid 设计中提及)
     -   [ ] 导航栏/菜单 (Navbar/Menu) - (首页设计中提及 `HorizontalNavigation`)这一部分可能不需要？我们可能直接使用网格完成导航功能。
-    -   [ ] 页头 (Header) 组件
-    -   [ ] 页脚 (Footer) 组件
+    -   [x] 页头 (Header) 组件
+    -   [x] 页脚 (Footer) 组件
     -   [ ] 头像 (Avatar) 组件 - (首页、学术主页设计中提及)
     -   [ ] 徽章 (Badge) 组件 - (博客列表、详情页设计中提及)
     -   [ ] (可选) 模态框 (Modal/Dialog) - (后台管理可能需要)
@@ -53,9 +53,9 @@
         -   [x] 社交/活动格 (联系我卡片) - *已配置，内容为占位*
         -   [x] 个人状态格 (原此刻卡片，图标可动态切换) - *已配置，模拟动态图标*
         -   [x] 爱听的歌格 (音乐角) - *占位TODO*
-    -   [ ] 顶部导航栏 (`HorizontalNavigation`)
-    -   [ ] 右下角 FAB (暗黑模式切换, 回到顶部)
-    -   [ ] 页脚 (版权, 访客计数器 - 后端依赖)
+    -   [x] 顶部导航栏 (`HorizontalNavigation`)
+    -   [x] 右下角 Dock (回到顶部, GitHub链接)
+    -   [x] 页脚 (版权)
 -   [ ] **Blog 列表页 (`/blog`)**
     -   [ ] 网格布局 (2-3 列)
     -   [ ] 文章预览卡片组件 (特色图片, 标题, 日期, 分类/标签)
@@ -109,7 +109,7 @@
 
 ## 阶段六：打磨与部署准备
 
--   [ ] **响应式设计适配**
+-   [ ] **响应式设计适配**(可选)
 -   [ ] **可访问性 (A11y) 检查与优化**
 -   [ ] **性能优化** (代码分割, 懒加载, 图片优化)
 -   [ ] **测试** (单元, 集成)

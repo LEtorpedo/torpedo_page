@@ -41,7 +41,7 @@ export default {
         },
         destructive: {
           DEFAULT: "oklch(var(--destructive) / <alpha-value>)",
-          foreground: "oklch(var(--destructive-foreground) / <alpha-value>)", // 确保 --destructive-foreground 在 index.css 中定义
+          foreground: "oklch(var(--destructive-foreground) / <alpha-value>)",
         },
         muted: {
           DEFAULT: "oklch(var(--muted) / <alpha-value>)",
@@ -60,12 +60,20 @@ export default {
           foreground: "oklch(var(--card-foreground) / <alpha-value>)",
         },
 
-        // --- 您的 Brand 颜色，使用 Hex，并为深色模式提供独立版本 ---
-        'brand-primary': '#14B8A6',         // 对应您之前的 DEFAULT: '#14B8A6' (Tailwind teal-500)
-        'brand-primary-light': '#2DD4BF',  // 对应您之前的 light: '#2DD4BF' (Tailwind teal-400)
-        'brand-primary-dark': '#0D9488',   // 对应您之前的 dark: '#0D9488' (Tailwind teal-600)
+        // --- 更新 Brand 颜色，使其通过 CSS 变量读取 ---
+        // 'brand-primary': {
+        //   DEFAULT: 'oklch(var(--brand-primary) / <alpha-value>)',
+        //   foreground: 'oklch(var(--brand-primary-foreground) / <alpha-value>)',
+        //   dark: 'oklch(var(--brand-primary-dark) / <alpha-value>)',
+        //   light: 'oklch(var(--brand-primary-light) / <alpha-value>)',
+        // },
+        
+        // 保留其他的 brand-* Hex 定义，如果它们在其他地方仍被直接使用
+        // 或者也可以逐步将它们都迁移到 CSS 变量模式
+        // 'brand-primary-light': '#2DD4BF',  // 暂时保留，以防万一，但理想情况下应移除或重命名
+        // 'brand-primary-dark': '#0D9488',   // 暂时保留
 
-        'brand-secondary': '#3B82F6',       // DEFAULT: '#3B82F6' (Tailwind blue-500)
+        'brand-secondary': '#3B82F6',
         'brand-secondary-light': '#60A5FA',// light: '#60A5FA' (Tailwind blue-400)
         'brand-secondary-dark': '#2563EB', // dark: '#2563EB' (Tailwind blue-600)
 
