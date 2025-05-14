@@ -9,14 +9,18 @@ interface BentoGridProps extends ComponentPropsWithoutRef<"div"> {
   className?: string;
 }
 
+// ButtonVariant 类型定义已移除，因为它在此文件中未被直接使用
+// 如果需要，可以在 config 文件中保留一个简化的 string 类型，或者从 Button 组件 props 推断
+
 interface BentoCardProps extends ComponentPropsWithoutRef<"div"> {
   name: string;
   className: string; // Crucial for spanning rows/columns
   background: ReactNode;
   Icon: React.ElementType;
   description: ReactNode;
-  href: string;
-  cta: string;
+  href?: string; // 用于直接链接
+  cta?: string;  // 按钮文字
+  onCtaClick?: () => void; // 新增：当CTA是触发器（例如模态框）时调用的回调
 }
 
 const BentoGrid = ({ children, className, ...props }: BentoGridProps) => {
@@ -41,6 +45,7 @@ const BentoCard = ({
   description,
   href,
   cta,
+  onCtaClick,
   ...props
 }: BentoCardProps) => (
   <div
@@ -67,14 +72,32 @@ const BentoCard = ({
     <div
       className={cn(
         "pointer-events-none absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100",
+        // 如果将来需要根据按钮数量调整样式，这里的逻辑可以恢复或修改
+        // (actions && actions.length > 1) ? "gap-2 flex-wrap" : ""
       )}
     >
-      <Button variant="ghost" asChild size="sm" className="pointer-events-auto">
-        <a href={href}>
+      {href && cta ? (
+        // 情况1：如果提供了 href，则渲染链接按钮
+        <Button variant="ghost" asChild size="sm" className="pointer-events-auto">
+          <a href={href}>
+            {cta}
+            <ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" />
+          </a>
+        </Button>
+      ) : cta && onCtaClick ? (
+        // 情况2：如果没提供 href，但提供了 cta 和 onCtaClick，则渲染普通按钮
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="pointer-events-auto" 
+          onClick={onCtaClick} // 调用传递的回调
+        >
           {cta}
-          <ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" />
-        </a>
-      </Button>
+          {/* 对于模态框触发器，通常不需要默认的向右箭头，除非特别设计 */}
+          {/* <ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" /> */}
+        </Button>
+      ) : null} 
+      {/* 如果既没有href也没有onCtaClick的cta，则不渲染任何按钮 */}
     </div>
     <div className="pointer-events-none absolute inset-0 transform-gpu transition-all duration-300 group-hover:bg-black/[.03] group-hover:dark:bg-neutral-800/10" />
   </div>

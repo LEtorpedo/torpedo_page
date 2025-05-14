@@ -1,22 +1,27 @@
 import React from 'react'; // Add React import for JSX
 import type { LucideIcon } from 'lucide-react'; // 或者直接使用 React.ElementType
 import type { ReactNode } from 'react';
-// 从 lucide-react 导入实际要用的图标
-import { 
-  UserCircle, 
-  Lightbulb, 
-  Newspaper, 
+import {
+  UserCircle,
+  Lightbulb,
+  Newspaper,
   Share2,
-  Music2, 
+  Music2,
   Smile, // Default mood icon
   Frown,    // Example: Sad mood
   Laugh,    // Example: Joyful mood
   Coffee,   // Example: Busy/Coding mood
-  Github    // Example: Thinking/Project mood (can be any relevant icon)
+  Github,   // Example: Thinking/Project mood (can be any relevant icon)
+  BookOpen, // Import BookOpen for academic icon
 } from 'lucide-react';
+import type { PointerProps } from '@/components/magicui/pointer'; // Import PointerProps
 
 // 定义我们配置对象中 Icon 的类型，可以是 LucideIcon 组件，或者其他 React 组件类型
 export type IconType = LucideIcon | React.ElementType;
+
+// 尝试从 bento-grid.tsx 或 ui/button 获取 ButtonVariant 类型，如果导出的话
+// 这是一个理想情况，暂时先用 string，后续可以优化
+type ButtonVariant = string; // ComponentPropsWithoutRef<typeof Button>['variant'];
 
 export interface BentoFeatureCardConfig {
   name: string;
@@ -27,6 +32,23 @@ export interface BentoFeatureCardConfig {
   description: string | ReactNode; // 描述可以是简单字符串或更复杂的 JSX
   href?: string;
   cta?: string;
+  modalDetails?: { // 新增：用于定义模态框的内容
+    title: string;
+    description?: string; // 模态框的可选描述
+    choices: Array<{
+      id: string; // Added id for key prop
+      text: string;
+      href: string;
+      variant?: ButtonVariant;
+      Icon: IconType; // Icon for the choice itself (large icon in modal)
+      iconSize?: number | string;
+      pointerConfig?: Partial<PointerProps> & { // Use imported PointerProps
+        customPointerVisual?: React.ReactNode;
+      };
+      target?: string;
+      rel?: string;
+    }>;
+  };
 }
 
 // --- 示例背景组件 (可以放在 utils 或 components/ui) ---
@@ -70,13 +92,39 @@ export const moodIcons: { [key: string]: IconType } = {
 
 export const bentoFeaturesData: BentoFeatureCardConfig[] = [
   {
-    name: "AboutMeCard", // 给一个唯一的 name，用于 React key
+    name: "AboutMeCard",
     className: "md:col-span-2 md:row-span-1",
-    Icon: UserCircle, // 直接使用导入的组件
+    Icon: UserCircle,
     title: "关于我",
     description: "一个热爱探索新技术的开发者，乐于分享与创造。目前专注于构建美观且实用的 Web 应用。",
-    href: "/academic",
-    cta: "认识我",
+    cta: "了解更多",
+    modalDetails: {
+      title: "你想进一步了解我的哪方面？",
+      choices: [
+        {
+          id: "personal-choice",
+          text: "个人生活与兴趣",
+          href: "/about",
+          Icon: UserCircle,
+          iconSize: 56,
+          variant: "outline",
+          pointerConfig: {
+            customPointerVisual: <div style={{ fontSize: '2rem' }}>😊</div>,
+          },
+        },
+        {
+          id: "academic-choice",
+          text: "学术与专业背景",
+          href: "/academic",
+          Icon: BookOpen,
+          iconSize: 56,
+          variant: "outline",
+          pointerConfig: {
+            customPointerVisual: <div style={{ fontSize: '2rem' }}>🎓</div>,
+          },
+        },
+      ],
+    },
     background: <GradientCardBackground />,
   },
   {
