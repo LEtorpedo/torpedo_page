@@ -1,6 +1,6 @@
 "use client";
 
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps } from "class-variance-authority";
 import {
   motion,
   MotionValue,
@@ -11,6 +11,7 @@ import {
 import React, { useRef } from "react";
 
 import { cn } from "@/lib/utils"; // 注意: 这个路径需要根据项目结构调整
+import { dockVariants } from "./Dock.variants"; // Import dockVariants
 
 export interface DockProps extends VariantProps<typeof dockVariants> {
   className?: string;
@@ -25,12 +26,8 @@ const DEFAULT_SIZE = 40;
 const DEFAULT_MAGNIFICATION = 60;
 const DEFAULT_DISTANCE = 140;
 
-// 修改 dockVariants 以支持垂直布局和固定定位
-const dockVariants = cva(
-  "fixed bottom-8 right-8 z-50 flex flex-col w-max max-w-[60px] items-center justify-center gap-3 rounded-2xl border bg-slate-100 p-2 shadow-lg dark:bg-slate-800 supports-backdrop-blur:bg-white/30 supports-backdrop-blur:dark:bg-black/30 backdrop-blur-md",
-  // 移除了 h-[58px], mx-auto, mt-8。增加了 fixed, bottom-8, right-8, z-50, flex-col, max-w-[60px]
-  // 调整了 gap, bg, dark:bg, backdrop-blur 支持的背景
-);
+// Removed the local dockVariants definition as it's now imported
+// const dockVariants = cva(...);
 
 const Dock = React.forwardRef<HTMLDivElement, DockProps>(
   (
@@ -136,4 +133,4 @@ const DockIcon = ({
 
 DockIcon.displayName = "DockIcon";
 
-export { Dock, DockIcon, dockVariants }; 
+export { Dock, DockIcon }; // Only export components 

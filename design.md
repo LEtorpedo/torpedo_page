@@ -159,6 +159,19 @@
 - **元数据管理:** 结合 React 表单库 (如 `React Hook Form`) 和自定义 React 输入组件 (基于 Headless UI 或 shadcn/ui 的 input, select, textarea 等) 管理文章元数据。
 - **体验优化:** 宽敞布局 (全屏/收起侧边栏选项), 实时预览, 图片上传集成, 自动保存等。
 
+### 4.3.1. (新增) 支持可自定义样式的动态文本内容
+
+- **目标:** 对于某些动态文本内容（例如首页"当前状态"卡片的描述），后台应能更灵活地控制其展示样式，包括但不限于部分文本使用特殊字体（如花体）、颜色或强调效果。
+- **后台实现思路:** 
+    - **推荐方案 (结构化数据):** 后台 API 提供结构化的文本片段数据，每个片段可包含文本内容和预定义的样式键 (如 `style_key: "cursive_main"` 或 `style_key: "highlight_color"`)。
+    - **编辑器支持:** 管理后台的编辑器（特别是富文本编辑器如 TipTap）应支持用户选择文本并应用这些预定义的样式标记。编辑器输出结构化的 JSON 数据。
+- **前端实现思路:**
+    - **样式映射:** 前端维护一个样式键到具体 CSS 样式的映射表（例如，`"cursive_main"` 对应 `fontFamily: '"Dancing Script Custom", cursive'`）。
+    - **动态渲染:** 前端根据从 API 获取的结构化数据和样式键，动态构建并渲染相应的 React 元素（如 `<span>` 包裹并应用样式）。
+- **字体管理:** 
+    - 对于后台可选的特殊字体，需要在前端项目中引入相应的字体文件 (如 `.woff2`)并通过 `@font-face` 规则定义。
+    - 后台编辑器中提供的"字体选择"或"样式选择"应对应前端已定义好的、可用的样式键。
+
 ### 4.4. 列表视图 & 管理界面
 
 - **数据展示:** 使用自定义的 React 表格组件 (例如基于 `TanStack Table` 库封装，或自行实现) 展示文章、分类、标签列表。
@@ -347,18 +360,4 @@ type TodoItem = {
 - **CSRF 防护**: 若使用基于 Cookie 的会话管理，需实施有效的 CSRF 防护策略 (如使用 `nuxt-security` 模块提供的功能或同步器模式 Token)。
 
 ## 5. 依赖管理与维护
-- **定期更新**: 定期审查并更新项目依赖（`package.json`），及时修复已知的安全漏洞。可使用 `npm audit` 或 `yarn audit` 等工具辅助检查。
-- **谨慎引入新依赖**: 评估新依赖的安全性、社区活跃度和维护状况。
-
-## 6. HTTP 安全头部
-- 考虑配置重要的 HTTP 安全头部，如：
-    - `Content-Security-Policy (CSP)`: 限制浏览器加载资源的来源。
-    - `X-Content-Type-Options: nosniff`
-    - `X-Frame-Options: DENY` 或 `SAMEORIGIN`
-    - `Strict-Transport-Security (HSTS)` (在 HTTPS 稳定运行后)
-- 可考虑使用 `nuxt-security` 模块简化配置，并致力于配置**严格且具体**的 `Content-Security-Policy` (CSP) 策略。
-
-## 7. 服务器端安全
-- 虽然本项目初期可能部署于 Serverless 平台，但仍需注意服务器端代码（`server/api/`, `server/middleware/`）的安全性，防止注入、未授权访问等问题。
-
-这些安全考虑将在项目开发的全生命周期中得到关注和实施。
+- **定期更新**: 定期审查并更新项目依赖（`package.json`），及时修复已知的安全漏洞。可使用 `

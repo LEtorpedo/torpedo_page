@@ -121,7 +121,6 @@ const Header: React.FC = () => {
           <div className="md:hidden flex items-center"> {/* 移动端显示后台图标 */}
             <NavLink 
               to="/admin-login" 
-              title="后台管理" 
               className={`${linkBaseStyles} ${
                 effectiveIsScrolled 
                   ? 'text-slate-700 dark:text-slate-200' 
