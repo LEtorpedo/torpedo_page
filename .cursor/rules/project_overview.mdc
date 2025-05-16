@@ -3,7 +3,6 @@ description:
 globs: 
 alwaysApply: true
 ---
-
 # Project Overview & Design Goals
 
 This project aims to build a modern, aesthetically pleasing personal homepage and blog using a **React frontend and a Python (FastAPI) backend**. It will also serve as a platform for personal tools, with some features requiring user login.
