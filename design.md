@@ -155,7 +155,7 @@
 
 ### 4.3. 文章编辑器
 
-- **核心:** 集成强大的 Markdown 编辑器 (React 版本，如 `Milkdown`, `BlockNote`, `TipTap` 或其他支持 Markdown 的富文本编辑器)。
+- **核心:** 集成强大的 Markdown 编辑器 (React 版本，如 `Milkdown`, `BlockNote`, `TipTap` 或其他支持 Markdown 的富文本编辑器)。选型时重点关注其定制性、React集成友好度、插件生态，以及对实现个性化功能（如自定义字体选择、Emoji表情集成）的支持程度，力求达到“惊艳”的编辑体验。
 - **元数据管理:** 结合 React 表单库 (如 `React Hook Form`) 和自定义 React 输入组件 (基于 Headless UI 或 shadcn/ui 的 input, select, textarea 等) 管理文章元数据。
 - **体验优化:** 宽敞布局 (全屏/收起侧边栏选项), 实时预览, 图片上传集成, 自动保存等。
 
@@ -188,7 +188,7 @@
         - **HTML 渲染:** 将 AST 渲染为 React 组件/HTML 元素。
         - **组件覆盖:** 允许用自定义 React 组件替换标准的 HTML 标签 (e.g., 自定义 `<a>`, `<img>`, `<code>` 等的渲染方式)。
 - **样式与排版:**
-    - **Tailwind CSS:** 主要通过 Tailwind CSS 직접 스타일링하거나 `@tailwindcss/typography` 插件을 활용하여 Markdown 콘텐츠에 아름답고 일관된 기본 스타일을 제공합니다.
+    - **Tailwind CSS:** 主要通过 Tailwind CSS 直接样式化或使用 `@tailwindcss/typography` 插件为 Markdown 内容提供美观且一致的基本样式。
     - **自定义样式:** 结合自定义 Tailwind CSS 规则进一步调整样式细节。
     - **字体:** 确保排版样式使用我们在 2.1 节选定的主字体。
 - **代码高亮:**

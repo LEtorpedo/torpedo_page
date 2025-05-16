@@ -7,7 +7,7 @@
     -   [ ] 配置依赖管理 (Poetry 或 PDM，生成 `pyproject.toml`，或使用 `requirements.txt`)
     -   [ ] 设置 `.env` 及通过 Pydantic `BaseSettings` 加载配置 (`app/core/config.py`)
     -   [ ] 配置数据库连接 (SQLite 初始化， `app/db/session.py`)
-    -   [ ] 实现基础的 SQLAlchemy 模型 (如果需要数据库存储早期功能，如网站心情)
+    -   [ ] 实现基础的数据模型 (例如文章、分类、标签等)，推荐使用 ORM (如 SQLAlchemy) 定义模型 (`app/models/`)，并配置数据库迁移工具 (如 Alembic)。
 -   [ ] **网站状态/心情 API**
     -   [ ] 设计数据库模型/存储方式来保存网站心情状态。
     -   [ ] 创建 Pydantic Schema (`app/schemas/`) 用于心情 API 的请求和响应。
