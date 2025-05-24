@@ -31,10 +31,12 @@ declare module '@tiptap/core' {
 export const StyledTextMark = Mark.create<StyledTextMarkOptions>({
   name: 'styledText', // Mark 的唯一名称
 
-  // 默认选项
-  defaultOptions: {
-    HTMLAttributes: {},
-    defaultStyleKey: 'normal',
+  // 添加选项，这是核心！
+  addOptions() {
+    return {
+      HTMLAttributes: {},
+      defaultStyleKey: 'normal' as AllowedStyleKeys, // Ensure type correctness
+    };
   },
 
   // 添加属性，这是核心！
@@ -49,8 +51,7 @@ export const StyledTextMark = Mark.create<StyledTextMarkOptions>({
           if (!attributes.styleKey || attributes.styleKey === this.options.defaultStyleKey) {
             return {}; // 如果是默认样式，不添加特殊属性
           }
-          // 我们在 HTML 中用 data-style-key 来存储，而不是直接应用 style
-          // 这样最终的渲染可以由 React 组件根据 styleKey 决定
+          // 存储 data-style-key 以便渲染时能够获取到 styleKey
           return { 'data-style-key': attributes.styleKey };
         },
       },
@@ -66,7 +67,7 @@ export const StyledTextMark = Mark.create<StyledTextMarkOptions>({
         tag: 'span[data-style-key]', // 匹配所有带 data-style-key 属性的 span
         getAttrs: (element) => {
           if (typeof element === 'string') return false; // Should not happen with tag selector
-          const styleKey = element.getAttribute('data-style-key');
+          const styleKey = element.getAttribute('data-style-key') as AllowedStyleKeys | null;
           return styleKey ? { styleKey } : false; // 只有当 data-style-key 存在时才应用此 mark
         },
       },
@@ -75,12 +76,25 @@ export const StyledTextMark = Mark.create<StyledTextMarkOptions>({
 
   // Tiptap 如何将这个 Mark 渲染成 HTML
   // HTMLAttributes 会包含上面 addAttributes() 中定义的属性 (如 styleKey)
-  renderHTML({ HTMLAttributes }) {
-    // mergeAttributes 用于合并默认的 HTMLAttributes 和我们想添加的
-    // 例如，如果 this.options.HTMLAttributes 包含 { class: 'my-custom-span' }
-    // 而 HTMLAttributes (来自 addAttributes) 包含 { 'data-style-key': 'cursive_main' }
-    // 最终会渲染出 <span class="my-custom-span" data-style-key="cursive_main"></span>
-    return ['span', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0];
+  renderHTML({ HTMLAttributes, mark }) {
+    // 从 mark.attrs 中获取 styleKey，这是正确的方式
+    const styleKey = mark.attrs.styleKey as AllowedStyleKeys;
+    let styleClasses = '';
+    
+    if (styleKey === 'cursive_main') {
+      styleClasses = 'font-serif italic text-purple-600 dark:text-purple-400';
+    } else if (styleKey === 'highlight_important') {
+      styleClasses = 'bg-yellow-200 dark:bg-yellow-800 px-1 py-0.5 rounded font-semibold text-red-600 dark:text-red-400';
+    }
+
+    // 合并默认属性、HTML属性和我们的样式类
+    const finalAttributes = mergeAttributes(
+      this.options.HTMLAttributes, 
+      HTMLAttributes,
+      styleClasses ? { class: styleClasses } : {}
+    );
+
+    return ['span', finalAttributes, 0];
     // '0' 代表内容应该被渲染在这个标签内部 (content hole)
   },
 

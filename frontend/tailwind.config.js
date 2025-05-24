@@ -117,6 +117,7 @@ export default {
     },
   },
   plugins: [
-    require("tailwindcss-animate") // 添加动画插件
+    require("tailwindcss-animate"), // 添加动画插件
+    require('@tailwindcss/typography'), // 添加 typography 插件
   ],
 }

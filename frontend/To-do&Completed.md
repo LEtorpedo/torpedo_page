@@ -1,86 +1,122 @@
 # 项目进度：To-do & Completed
 
-## 阶段一：基础架构与核心样式
+## 🎯 当前实施阶段与优先级 (2024-12-19)
 
+### Phase 1 - TipTap 编辑器系统完善 (当前焦点)
+-   [x] **TipTap 基础集成与自定义 Mark 验证**
+    -   [x] 安装 TipTap 相关依赖包 (@tiptap/core, @tiptap/react, @tiptap/starter-kit, @tiptap/extension-text-style)
+    -   [x] 实现 `StyledTextMark.ts` 自定义扩展，支持 styleKey 属性
+    -   [x] 创建 `EditorSandboxPage.tsx` 进行技术验证
+    -   [x] 验证 JSON 输出格式，确认可以正确存储和提取 styleKey 信息
+-   [x] **编辑器迁移到 CMS Playground (已完成)**
+    -   [x] 将 EditorSandboxPage 中的核心逻辑迁移到 CmsPlaygroundPage
+    -   [x] 重新集成 StyledTextMark 自定义扩展
+    -   [x] 添加样式应用按钮到工具栏 (紫色斜体、重要高亮、清除样式)
+    -   [x] 集成文章元数据表单 (标题输入，摘要、分类、标签待补充)
+    -   [x] 实现保存功能 (控制台输出，后期对接 API)
+-   [x] **ContentRenderer 渲染管道完善 (已完成)**
+    -   [x] 基础节点支持 (段落、标题、列表、加粗、斜体、删除线、链接)
+    -   [x] 引用块和水平分割线支持
+    -   [x] **StyledTextMark 渲染**：实现 styleKey 到 CSS 样式的映射渲染
+    -   [x] **编辑器样式修复**：通过 index.css 强制应用标题大小和自定义样式
+    -   [*] 代码块渲染优化 (当前基础实现，需要语法高亮)
+    -   [ ] 图片渲染支持
+-   [x] **编辑器 UI 与交互优化 (已完成)**
+    -   [x] 基础工具栏 (Bold, Italic, Headings, Lists, Blockquote, etc.)
+    -   [x] 三视图切换 (WYSIWYG / Markdown 源码 / JSON)
+    -   [x] 样式应用按钮 (紫色斜体、重要高亮、清除样式)
+    -   [x] **WYSIWYG 样式显示修复**：标题大小区分、自定义样式可见
+    -   [ ] 键盘快捷键配置 (可选后期优化)
+    -   [ ] (可选) 斜杠命令集成
+
+### Phase 2 - 后端 API 开发 (并行启动)
+-   [ ] **FastAPI 项目初始化**
+    -   [ ] 项目结构搭建 (`app/main.py`, `app/core/`, `app/models/`, `app/apis/`)
+    -   [ ] 依赖管理配置 (Poetry 或 `requirements.txt`)
+    -   [ ] 环境配置 (.env + Pydantic BaseSettings)
+    -   [ ] CORS 配置
+-   [ ] **数据库设计与 ORM 配置**
+    -   [ ] SQLAlchemy 模型定义 (Post, Category, Tag, User)
+    -   [ ] Post 模型设计：基于 TipTap JSON 输出的 content 字段结构
+    -   [ ] Alembic 迁移配置
+    -   [ ] 数据库初始化脚本
+-   [ ] **核心 API 端点实现**
+    -   [ ] 博客文章 CRUD (`/api/posts`)
+    -   [ ] 分类标签管理 (`/api/categories`, `/api/tags`)
+    -   [ ] 网站状态 API (`/api/site-status`) - 支持首页心情状态
+    -   [ ] **结构化文本 API**：支持 styleKey 的动态文本内容
+
+### Phase 3 - 博客功能完整实现
+-   [ ] **Blog 列表页 (`/blog`)**
+    -   [ ] 网格布局设计 (2-3 列响应式)
+    -   [ ] 文章预览卡片组件
+    -   [ ] 筛选和排序功能
+    -   [ ] 分页组件
+-   [ ] **Blog 详情页 (`/blog/:slug`)**
+    -   [ ] 基于 ContentRenderer 的 Markdown 渲染
+    -   [ ] 侧边栏：目录、作者信息、相关文章
+    -   [ ] 阅读进度指示器
+    -   [ ] SEO 优化 (meta tags, structured data)
+
+## ✅ 已完成的基础架构
+
+### 阶段一：基础架构与核心样式
 -   [x] **项目初始化** (React + Vite + TS)
 -   [x] **Tailwind CSS 集成与基本配置**
-    -   [x] Tailwind v4 引入 (`@import "tailwindcss";`)
-    -   [x] `tailwind.config.js`, `postcss.config.js` 生成
-    -   [x] 路径别名配置 (`@/`)
-    -   [x] `index.css` 全局样式、字体加载 (Noto Serif, Noto Serif SC)
-    -   [x] **颜色系统整合** (确保 `tailwind.config.js` 中 `brand-*` 颜色与 `index.css` 协调，并支持 `dark:` 模式切换) - *完成 (最终采用标准Tailwind颜色类解决自定义名称问题，暗黑模式颜色没弄)*
-        -   [x] `tailwind.config.js` 已更新，包含 `brand-*` Hex 颜色及其 `dark` 版本。
-        -   [x] 确认 `index.css` 中 `--destructive-foreground` CSS 变量已定义 (或从 tailwind config 中移除引用)。
-    -   [x] `darkMode: 'class'` 配置
+    -   [x] Tailwind v4 引入、路径别名配置 (`@/`)
+    -   [x] 全局样式、字体加载 (Noto Serif, Noto Serif SC)
+    -   [x] 颜色系统整合，`darkMode: 'class'` 配置
     -   [x] `tailwindcss-animate` 插件集成
-        -   [x] 运行 `npm install tailwindcss-animate`
-        -   [x] `tailwind.config.js` 中已添加插件引用。
 -   [x] **代码规范与格式化工具配置**
-    -   [x] ESLint (检查/完善 `eslint.config.js` 或 `.eslintrc.cjs`)
-    -   [x] Prettier (检查/创建 `.prettierrc.js` 并配置)
-    -   [x] 在 `package.json` 中添加 lint 和 format 的 npm scripts
+    -   [x] ESLint (`eslint.config.js`)
+    -   [x] Prettier (`.prettierrc.js`)
+    -   [x] lint 和 format 的 npm scripts
 
-## 阶段二：核心布局与通用组件
-
--   [x] **设计并实现站点整体布局 (Layouts)**
-    -   [x] `MainLayout.tsx` (页头 Header, 页脚 Footer, 内容区) 
-    -   [ ] (可选) 侧边栏 (Sidebar) 布局
--   [ ] **实现通用 UI 组件**
-    -   [ ] 按钮 (Button)
-    -   [ ] 输入框 (Input)
-    -   [ ] 卡片 (Card) - (Bento Grid 设计中提及)
-    -   [ ] 导航栏/菜单 (Navbar/Menu) - (首页设计中提及 `HorizontalNavigation`)这一部分可能不需要？我们可能直接使用网格完成导航功能。
+### 阶段二：核心布局与通用组件
+-   [x] **站点整体布局**
+    -   [x] `MainLayout.tsx` (页头 Header, 页脚 Footer, 内容区)
     -   [x] 页头 (Header) 组件
     -   [x] 页脚 (Footer) 组件
-    -   [ ] 头像 (Avatar) 组件 - (首页、学术主页设计中提及)
-    -   [ ] 徽章 (Badge) 组件 - (博客列表、详情页设计中提及)
-    -   [ ] (可选) 模态框 (Modal/Dialog) - (后台管理可能需要)
-    -   [ ] (可选) 选择器 (Select/Listbox/Combobox) - (博客列表筛选可能需要)
-    -   [ ] (可选) 分页 (Pagination) 组件 - (博客列表页设计中提及)
-    -   [ ] 图标系统集成 (React Icons / Heroicons)
--   [x] **路由系统设置 (React Router)**
+-   [x] **路由系统设置** (React Router)
     -   [x] 安装 `react-router-dom`
-    -   [x] 定义基础路由结构 (在 `main.tsx` 中集成 `MainLayout` 和占位页面)
+    -   [x] 基础路由结构定义
 
-## 阶段三：页面开发 - 核心页面 (根据 `design.md`)
+### 阶段三：核心页面实现
+-   [x] **Homepage (`/`) 完整实现**
+    -   [x] Hero Section (座右铭, 粒子背景)
+    -   [x] Bento Grid 布局 (自我介绍、项目精选、最新文章、社交链接、个人状态、音乐角)
+    -   [x] 顶部导航栏、右下角 Dock、页脚
+-   [x] **Admin Panel 基础布局**
+    -   [x] 类 Discord 设计：左侧工具导航栏 + 主内容区
+    -   [x] 可收起侧边栏，工具作用域选择交互
+    -   [x] Dashboard 路由和 Outlet 集成
 
--   [x] **Homepage (`/`)**
-    -   [x] Hero Section (座右铭, 粒子背景) - *假设已完成，如未完成请取消勾选*
-    -   [x] Bento Grid 布局实现 (集成 `bento-grid.tsx`)
-        -   [x] 自我介绍格 (简介, 头像) - *部分内容已配置*
-        -   [x] 项目精选格 (卡片效果, 标题, 简述, 链接) - *内容已配置，链接到实际仓库*
-        -   [x] 最新文章格 (卡片, 标题列表, 日期) - *占位TODO*
-        -   [x] 社交/活动格 (联系我卡片) - *已配置，内容为占位*
-        -   [x] 个人状态格 (原此刻卡片，图标可动态切换) - *已配置，模拟动态图标*
-        -   [x] 爱听的歌格 (音乐角) - *占位TODO*
-    -   [x] 顶部导航栏 (`HorizontalNavigation`)
-    -   [x] 右下角 Dock (回到顶部, GitHub链接)
-    -   [x] 页脚 (版权)
--   [ ] **Blog 列表页 (`/blog`)**
-    -   [ ] 网格布局 (2-3 列)
-    -   [ ] 文章预览卡片组件 (特色图片, 标题, 日期, 分类/标签)
-    -   [ ] 顶部筛选 (分类) 与排序 (日期)
-    -   [ ] 分页功能
--   [ ] **Blog 详情页 (`/blog/:slug`)**
-    -   [ ] 双栏布局
-    -   [ ] 主栏:
-        -   [ ] Markdown 内容渲染 (`react-markdown`, 代码高亮, Tailwind Typography)
-        -   [ ] 文章元数据 (作者, 日期, 阅读时间, 分类/标签)
-    -   [ ] 侧边栏:
-        -   [ ] 作者简介 (头像, 介绍)
-        -   [ ] 文章目录 (TOC) - (滚动固定)
-        -   [ ] 相关文章推荐
-        -   [ ] 标签云
-    -   [ ] 增强: 阅读进度指示器, 评论区占位
--   [ ] **学术主页 (`/academic`)**
-    -   [ ] 专业、简洁的布局与视觉风格
-    -   [ ] 基本信息 (照片, 姓名, 身份, 简介)
-    -   [ ] 教育背景
-    -   [ ] 研究/学习兴趣
-    -   [ ] 项目经历/实践 (卡片展示)
-    -   [ ] 发表/成果 (占位)
-    -   [ ] 个人简历 (PDF 链接按钮)
-    -   [ ] 联系方式 & 链接 (邮箱, 带 Tooltip 的图标链接)
+## 📋 通用组件待实现
+-   [ ] **基础 UI 组件**
+    -   [ ] 按钮 (Button) 组件标准化
+    -   [ ] 输入框 (Input) 组件
+    -   [ ] 卡片 (Card) 组件重构
+    -   [ ] 头像 (Avatar) 组件
+    -   [ ] 徽章 (Badge) 组件
+    -   [ ] 模态框 (Modal/Dialog)
+    -   [ ] 选择器 (Select/Listbox/Combobox)
+    -   [ ] 分页 (Pagination) 组件
+
+## 🔮 未来规划
+-   [ ] **学术主页** (`/academic`) 实现
+-   [ ] **个人工具 Playground** (RSS 阅读器、待办事项)
+-   [ ] **响应式设计适配**
+-   [ ] **可访问性 (A11y) 优化**
+-   [ ] **性能优化** (代码分割, 懒加载, 图片优化)
+-   [ ] **测试覆盖** (单元, 集成测试)
+
+---
+
+**实施原则:**
+-   ✅ 已完成或基本完成
+-   [*] 正在进行中  
+-   [ ] 待办任务
+-   优先完成当前 Phase，确保功能完整性后再推进下一阶段
 
 ## 阶段四：功能开发与状态管理
 
@@ -138,32 +174,45 @@
 
 -   [ ] **Admin Panel 布局 (采用类 Discord 设计)**
     -   [ ] **左侧导航栏 (工具选择区):**
-        -   [ ] 设计并实现工具图标和名称展示
-        -   [ ] 实现导航项的选中与高亮逻辑 (已部分完成，使用 NavLink)
-        -   [ ] 实现可收起的侧边栏 (手动触发，展开显示图标+名称，收起仅显示图标)
-            -   [ ] 添加侧边栏展开/收起状态管理
-            -   [ ] 实现侧边栏宽度和平滑过渡动画
-            -   [ ] 实现根据展开状态动态显示/隐藏工具名称及调整布局
-            -   [ ] 添加手动触发收起/展开的按钮及图标
-        -   [ ] 实现常用工具置顶功能 (UI 与逻辑)
-        -   [ ] 实现最近使用工具排序功能 (UI 与逻辑)
-        -   [ ] 设计并实现工具"作用域"选择的展开栏/快捷菜单交互 (先实现UI占位)
+        -   [x] 设计并实现工具图标和名称展示
+        -   [x] 实现导航项的选中与高亮逻辑 (使用 NavLink)
+        -   [x] 实现可收起的侧边栏 (手动触发，展开显示图标+名称，收起仅显示图标)
+            -   [x] 添加侧边栏展开/收起状态管理
+            -   [x] 实现侧边栏宽度和平滑过渡动画 (已使用 Headless UI Transition 优化 ScopeSubMenu)
+            -   [x] 实现根据展开状态动态显示/隐藏工具名称及调整布局
+            -   [x] 添加手动触发收起/展开的按钮及图标
+        -   [ ] 设计并实现工具"作用域"选择的内联展开交互 (已实现初步UI与动画，功能待连接)
+        -   [ ] (后续优化) 实现常用工具置顶功能 (UI 与逻辑)
+        -   [ ] (后续优化) 实现最近使用工具排序功能 (UI 与逻辑)
     -   [ ] **主内容区 (工具 Playground 容器):**
-        -   [ ] 设计并实现主内容区框架
-        -   [ ] 实现根据左侧导航选择动态加载对应工具 Playground 的逻辑 (已部分完成，通过路由和Outlet)
+        -   [x] 设计并实现主内容区框架 (通过 DashboardLayout 和 Outlet)
+        -   [x] 实现根据左侧导航选择动态加载对应工具 Playground 的逻辑 (通过路由和Outlet)
+
 -   [ ] **内容管理 (CMS) - 工具 Playground 形态**
-    -   [ ] 文章管理 Playground (基于Tiptap的富文本编辑器，含实时预览、自定义样式等)
-        -   [ ] **Markdown 编辑器选型与调研:** (Tiptap 已初步选定)
-        -   [ ] **Markdown 编辑器核心功能集成 (CmsPlaygroundPage):**
-            -   [ ] 正式集成 Tiptap 编辑器 (基于 EditorSandboxPage 的经验)
-            -   [ ] 实现文章标题等元数据输入表单
-            -   [ ] 设计并实现编辑器可视化工具栏 (标准格式化、自定义styleKey应用)
-            -   [ ] 研究并集成键盘快捷方式 (Tiptap内置与自定义)
-            -   [ ] (可选) 研究并集成"斜杠命令"功能
-            -   [ ] 实现通用实时预览区 (基于Tiptap JSON 和 styleKey 渲染)
-        -   [ ] (远期) 探索集成更高级的"页面级所见即所得"预览模式
+    -   [*] **文章管理 Playground (CmsPlaygroundPage.tsx) - 当前焦点**
+        -   [ ] **Markdown 编辑器核心功能集成:**
+            -   [x] 将 EditorSandboxPage 中的 Tiptap 编辑器逻辑 (useEditor, extensions) 正式迁移并集成到 CmsPlaygroundPage。
+            -   [x] 在 CmsPlaygroundPage 中渲染 EditorContent。
+            -   [x] 实现简单的文章元数据输入表单 (标题输入框)。
+            -   [x] 实现"保存"按钮（初期仅在控制台打印标题和编辑器JSON）。
+            -   [ ] (已移除 StyledTextMark) 验证 StyledTextMark 自定义样式能在 CmsPlaygroundPage 的编辑器中正确应用和输出JSON。
+            -   [x] 实现编辑器 WYSIWYG / Markdown 源码 / JSON 视图切换功能。
+            -   [x] 工具栏添加常用 Markdown 格式化按钮 (Bold, Italic, Headings, Lists, Blockquote, Horizontal Rule, CodeBlock)。
+        -   [ ] **ContentRenderer.tsx (实时预览渲染逻辑) 完善:**
+            -   [x] 支持段落、标题、列表、加粗、斜体、删除线、行内代码、链接。
+            -   [x] 支持块级引用 (Blockquote)。
+            -   [x] 支持水平分割线 (HorizontalRule)。
+            -   [*] 支持代码块 (CodeBlock) - 基础渲染 (当前测试)。
+            -   [*] 支持硬换行 (HardBreak) - (当前测试)。
+            -   [ ] (后续) 代码块语法高亮。
+            -   [ ] (后续) 图片渲染。
+        -   [ ] (下一步) 设计并实现更完善的编辑器可视化工具栏 (例如，下拉菜单组织复杂选项)。
+        -   [ ] (后续) 研究并集成键盘快捷方式 (Tiptap内置与自定义)。
+        -   [ ] (后续可选) 研究并集成"斜杠命令"功能。
+        -   [ ] (远期) 探索集成更高级的"页面级所见即所得"预览模式。
     -   [ ] 分类管理 Playground (占位)
     -   [ ] 标签管理 Playground (占位)
+
 -   [ ] **个人工具 (Workbench - Playground 形态，根据 `design.md` 未来考虑)**
     -   [ ] RSS 阅读器 Playground (占位)
     -   [ ] 待办事项列表 Playground (占位)

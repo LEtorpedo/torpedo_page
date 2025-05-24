@@ -1,5 +1,40 @@
 # 个人博客设计草案
 
+## 0. 当前实施状态与下一步重点 (2024-12-19)
+
+### 0.1. 已完成的核心基础
+- ✅ **前端技术栈完整搭建**：React + Vite + TypeScript + Tailwind CSS
+- ✅ **首页 Bento Grid 布局**：Hero Section, 自我介绍, 项目精选, 社交链接等
+- ✅ **TipTap 编辑器技术验证**：自定义 StyledTextMark 扩展已实现，支持 styleKey 样式系统
+- ✅ **基础页面结构**：路由系统和页面占位符已完成
+- ✅ **管理后台框架**：Dashboard 布局结构已搭建
+
+### 0.2. 当前实施重点与优先级
+
+**🎯 Phase 1 - TipTap 编辑器系统完善 (当前焦点)**
+1. **编辑器核心功能迁移**：将 EditorSandboxPage 的验证逻辑迁移到 CmsPlaygroundPage
+2. **ContentRenderer 完善**：实现完整的 JSON 到 React 组件的渲染管道
+3. **工具栏功能扩展**：实现可视化工具栏，支持全面的 Markdown 格式化
+4. **预览系统优化**：实现 WYSIWYG / Markdown 源码 / JSON 三视图切换
+
+**🚀 Phase 2 - 后端 API 开发 (并行启动)**
+1. **FastAPI 项目初始化**：项目结构、依赖管理、基础配置
+2. **数据模型设计**：基于前端编辑器的 JSON 输出优化数据库设计
+3. **博客 CRUD API**：文章、分类、标签的 REST API
+4. **动态样式文本 API**：支持 styleKey 的结构化文本存储与检索
+
+**📝 Phase 3 - 博客功能实现**
+1. **文章列表页**：网格布局、筛选、分页
+2. **文章详情页**：Markdown 渲染、目录、相关推荐
+3. **数据流整合**：前后端数据交互完整对接
+
+### 0.3. 技术决策确认
+- **Markdown 编辑器**：TipTap (已确认，基于 ProseMirror，高度可定制)
+- **样式系统**：styleKey 映射模式 (已实现，支持 normal/cursive_main/highlight_important)
+- **后端框架**：FastAPI + SQLAlchemy + Alembic
+- **数据库**：SQLite (开发阶段)
+- **部署方案**：前端 Vercel/Netlify，后端待定
+
 ## 1. 核心目标与技术选型
 
 ### 1.1. 核心目标
