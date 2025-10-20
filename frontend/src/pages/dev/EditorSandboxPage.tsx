@@ -1,131 +1,82 @@
 import React, { useState } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import TextStyle from '@tiptap/extension-text-style'; // TextStyle is often a prerequisite or useful with custom style marks
-import { StyledTextMark } from '@/components/tiptap-extensions/StyledTextMark';
-import type { AllowedStyleKeys } from '@/components/tiptap-extensions/StyledTextMark'; // 修正类型导入
-
-// 基本样式，确保编辑器可见且有一点边距
-const editorContainerStyle: React.CSSProperties = {
-  border: '1px solid #ccc',
-  padding: '10px',
-  minHeight: '200px',
-  marginTop: '20px',
-};
-
-const buttonStyle: React.CSSProperties = {
-  marginRight: '10px',
-  marginBottom: '10px',
-  padding: '8px 12px',
-  cursor: 'pointer',
-};
-
-const outputStyle: React.CSSProperties = {
-  marginTop: '20px',
-  padding: '10px',
-  border: '1px dashed #eee',
-  whiteSpace: 'pre-wrap', // 保持 JSON 格式
-  wordBreak: 'break-all',
-  maxHeight: '300px',
-  overflowY: 'auto',
-  backgroundColor: '#f9f9f9',
-};
+import BlogPostEditor from '@/components/cms/BlogPostEditor';
 
 const EditorSandboxPage: React.FC = () => {
-  const [editorJsonOutput, setEditorJsonOutput] = useState<string>('');
+  const [savedContent, setSavedContent] = useState<{
+    json: object;
+    html: string;
+  } | null>(null);
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        // 如果只想测试 Mark，可以禁用 StarterKit 的一些默认 marks 避免冲突或混淆
-        // bold: false,
-        // italic: false,
-      }),
-      TextStyle, // TextStyle is important for custom marks that might interact with inline styles
-      StyledTextMark.configure({
-        // 我们可以在这里为 StyledTextMark 传递选项，例如默认的 HTMLAttributes
-        // HTMLAttributes: { class: 'custom-styled-text' },
-      }),
-    ],
-    content: `
-      <p>Hello World! This is a test.</p>
-      <p>Select some text and apply a style.</p>
-      <p>This text has a <span data-style-key="cursive_main">predefined cursive style</span> from HTML.</p>
-    `,
-    onUpdate: ({ editor }) => {
-      // 当编辑器内容更新时，实时更新页面上显示的 JSON
-      setEditorJsonOutput(JSON.stringify(editor.getJSON(), null, 2));
-    },
-  });
-
-  if (!editor) {
-    return null; // 或者一个加载指示器
-  }
-
-  const applyStyle = (styleKey: AllowedStyleKeys) => {
-    editor.chain().focus().setStyleKey(styleKey).run();
+  const handleSave = (json: object, html: string) => {
+    setSavedContent({ json, html });
+    console.log('保存的内容:', { json, html });
+    alert('内容已保存！查看控制台获取详细信息。');
   };
 
-  const removeStyle = () => {
-    editor.chain().focus().unsetStyleKey().run();
-  };
+  const initialContent = `
+    <h1>欢迎使用博客编辑器</h1>
+    <p>这是一个功能完整的<strong>所见即所得</strong>富文本编辑器。</p>
 
-  const logJson = () => {
-    const json = editor.getJSON();
-    console.log(json);
-    setEditorJsonOutput(JSON.stringify(json, null, 2)); // 美化 JSON 输出
-  };
+    <h2>快捷键支持</h2>
+    <p>支持 Markdown 快捷键：</p>
+    <ul>
+      <li>输入 <code>#</code> 然后空格创建标题（# 到 ###### 对应 H1-H6）</li>
+      <li>输入 <code>-</code> 或 <code>*</code> 然后空格创建列表</li>
+      <li>输入 <code>1.</code> 然后空格创建有序列表</li>
+      <li><strong>Ctrl+B</strong> 加粗，<strong>Ctrl+I</strong> 斜体，<strong>Ctrl+U</strong> 下划线</li>
+    </ul>
+
+    <h2>功能展示</h2>
+    <h3>数学公式</h3>
+    <p>点击工具栏的公式按钮插入数学公式。编辑器支持：</p>
+    <ul>
+      <li>行内公式</li>
+      <li>块级公式</li>
+    </ul>
+
+    <h3>代码高亮</h3>
+    <p>点击代码块按钮插入代码：</p>
+    <pre><code>function hello() {
+  console.log("Hello World!");
+}</code></pre>
+
+    <h3>表格</h3>
+    <p>点击表格按钮插入表格。</p>
+
+    <h3>图片和链接</h3>
+    <p>使用工具栏按钮插入<a href="https://example.com">链接</a>和图片。</p>
+
+    <p><em>开始你的创作吧！</em></p>
+  `;
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Tiptap Editor Sandbox</h1>
-      <p>Test custom styled text mark.</p>
-
-      <div>
-        <button
-          onClick={() => applyStyle('cursive_main')}
-          disabled={!editor.can().setStyleKey('cursive_main')}
-          style={{
-            ...buttonStyle,
-            fontFamily: editor.isActive('styledText', { styleKey: 'cursive_main' }) ? '"Dancing Script Custom", cursive' : 'inherit',
-            fontWeight: editor.isActive('styledText', { styleKey: 'cursive_main' }) ? 'bold' : 'normal',
-          }}
-        >
-          Apply Cursive Style
-        </button>
-        <button
-          onClick={() => applyStyle('highlight_important')}
-          disabled={!editor.can().setStyleKey('highlight_important')}
-          style={{
-            ...buttonStyle,
-            backgroundColor: editor.isActive('styledText', { styleKey: 'highlight_important' }) ? 'yellow' : 'inherit',
-            color: editor.isActive('styledText', { styleKey: 'highlight_important' }) ? 'red' : 'inherit',
-          }}
-        >
-          Apply Highlight Important
-        </button>
-        <button
-          onClick={removeStyle}
-          style={buttonStyle}
-        >
-          Remove Custom Style (Set to Normal)
-        </button>
+    <div className="h-screen flex flex-col bg-gray-50">
+      <div className="bg-white border-b border-gray-200 p-4">
+        <h1 className="text-xl font-semibold text-gray-900">编辑器沙盒</h1>
+        <p className="text-sm text-gray-600 mt-1">测试与开发环境</p>
       </div>
 
-      <div style={editorContainerStyle}>
-        <EditorContent editor={editor} />
+      <div className="flex-1 overflow-hidden">
+        <BlogPostEditor initialContent={initialContent} onSave={handleSave} />
       </div>
 
-      <div>
-        <button onClick={logJson} style={{ ...buttonStyle, marginTop: '20px' }}>
-          Log Editor JSON to Console & Page
-        </button>
-      </div>
-
-      {editorJsonOutput && (
-        <div>
-          <h3>Editor JSON Output:</h3>
-          <pre style={outputStyle}><code>{editorJsonOutput}</code></pre>
+      {savedContent && (
+        <div className="border-t border-gray-300 p-4 bg-gray-50 max-h-64 overflow-auto">
+          <h3 className="font-bold text-lg mb-2">最近保存的内容：</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <h4 className="font-semibold mb-1">JSON 格式：</h4>
+              <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs overflow-x-auto">
+                {JSON.stringify(savedContent.json, null, 2)}
+              </pre>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-1">HTML 格式：</h4>
+              <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs overflow-x-auto">
+                {savedContent.html}
+              </pre>
+            </div>
+          </div>
         </div>
       )}
     </div>

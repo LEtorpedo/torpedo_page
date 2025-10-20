@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App';
+import App from './App'; // 通常 .tsx 扩展名在导入时是可选的，取决于 tsconfig
 import './index.css'; // 全局样式
+import './styles/editor.css'; // 编辑器样式
 // import './App.css'; // 如果 App.css 是特定于 App 组件的，可以在 App.tsx 中导入，或者如果也是全局的，保留也可以
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
