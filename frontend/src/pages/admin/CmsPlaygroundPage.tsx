@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import { Markdown } from 'tiptap-markdown';
-import TextStyle from '@tiptap/extension-text-style';
-import Underline from '@tiptap/extension-underline';
-import Color from '@tiptap/extension-color';
-import Highlight from '@tiptap/extension-highlight';
+import { StarterKit } from '@tiptap/starter-kit';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { Underline } from '@tiptap/extension-underline';
+import { Color } from '@tiptap/extension-color';
+import { Highlight } from '@tiptap/extension-highlight';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { Image } from '@tiptap/extension-image';
+import { Link } from '@tiptap/extension-link';
+import { Placeholder } from '@tiptap/extension-placeholder';
+import { Typography } from '@tiptap/extension-typography';
 import type { ProseMirrorNode } from '@/components/cms/ContentRenderer';
 import {
   BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon,
-  ListIcon, ListOrderedIcon, PilcrowIcon, Heading1Icon, Heading2Icon, Heading3Icon, 
+  ListIcon, ListOrderedIcon, PilcrowIcon, Heading1Icon, Heading2Icon, Heading3Icon,
   QuoteIcon, MinusIcon, CodeIcon as CodeBlockIcon,
   FileTextIcon, TerminalIcon, EyeIcon,
-  HighlighterIcon, Type
+  HighlighterIcon, Type, TableIcon, ImageIcon, LinkIcon, Columns3Icon
 } from 'lucide-react';
 
 // --- 样式定义 (可以考虑提取到单独的 CSS 文件或使用 Tailwind JIT/variants) ---
@@ -26,22 +33,7 @@ const editorAndSourceViewContainerStyle: React.CSSProperties = {
 const toolbarButtonStyleClasses = "p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-slate-200 dark:focus:bg-slate-700 text-slate-700 dark:text-slate-300";
 const toolbarActiveButtonStyleClasses = "bg-sky-100 dark:bg-sky-700 text-sky-600 dark:text-sky-300";
 
-// Prose classes are now applied directly to editorProps.attributes 
-
-const sourceViewStyle: React.CSSProperties = {
-  width: '100%',
-  height: '100%',
-  padding: '1rem',
-  border: 'none', // Border is on the container
-  borderRadius: '0',
-  fontFamily: 'monospace',
-  fontSize: '0.875rem',
-  whiteSpace: 'pre-wrap',
-  wordBreak: 'break-all',
-  backgroundColor: '#f9fafb', // slate-50
-  color: '#374151', // text-gray-700
-  resize: 'none',
-};
+// Prose classes are now applied directly to editorProps.attributes
 
 const jsonDebugStyle: React.CSSProperties = {
   width: '100%',
@@ -111,17 +103,16 @@ const HIGHLIGHT_COLORS = [
 ];
 
 const CmsPlaygroundPage: React.FC = () => {
-  const [title, setTitle] = useState<string>('Typora-like Experience');
-  const [markdownSource, setMarkdownSource] = useState<string>('');
-  const [viewMode, setViewMode] = useState<'wysiwyg' | 'markdown' | 'json'>('wysiwyg');
+  const [title, setTitle] = useState<string>('TipTap v3 增强编辑器');
+  const [viewMode, setViewMode] = useState<'wysiwyg' | 'json'>('wysiwyg');
   const [editorJson, setEditorJson] = useState<ProseMirrorNode | null>(null);
   const [showTextColorPicker, setShowTextColorPicker] = useState(false);
   const [showHighlightPicker, setShowHighlightPicker] = useState(false);
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({ 
-        heading: { levels: [1, 2, 3] },
+      StarterKit.configure({
+        heading: { levels: [1, 2, 3, 4, 5, 6] },
       }),
       TextStyle, // Required for Color extension
       Underline, // 下划线扩展
@@ -131,12 +122,32 @@ const CmsPlaygroundPage: React.FC = () => {
       Highlight.configure({
         multicolor: true,
       }),
-      Markdown.configure({
-        html: true,
-        tightLists: true,
-        linkify: true,
-        breaks: true,
+      Table.configure({
+        resizable: true,
+        HTMLAttributes: {
+          class: 'tiptap-table',
+        },
       }),
+      TableRow,
+      TableCell,
+      TableHeader,
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+        HTMLAttributes: {
+          class: 'tiptap-image',
+        },
+      }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: 'tiptap-link',
+        },
+      }),
+      Placeholder.configure({
+        placeholder: '开始书写你的文章...',
+      }),
+      Typography,
     ],
     editorProps: {
       attributes: {
@@ -144,31 +155,21 @@ const CmsPlaygroundPage: React.FC = () => {
         class: 'prose dark:prose-invert max-w-none focus:outline-none p-4',
       },
     },
-    content: `# 🎨 TipTap 模块化样式系统\n\n## 📝 功能演示 - 模块化升级！\n\n这是一个包含 **粗体**、_斜体_、<u>下划线</u> 和 ~~删除线~~ 的段落。\n\n### ✨ 灵活样式组合系统\n\n**全新设计**：基础样式 + 颜色工具分离，支持自由组合！\n\n**基础样式工具**：\n- **粗体** (Bold)\n- _斜体_ (Italic) \n- <u>下划线</u> (Underline) - 新增独立功能\n- ~~删除线~~ (Strike) - 标准格式化\n\n**颜色工具**：\n- 文字颜色：蓝色、绿色、紫色、红色、橙色\n- 背景高亮：黄色、蓝色、绿色、紫色、粉色\n\n### 🎯 组合示例\n\n选择文字后可以自由组合：\n- 深蓝色 + 下划线 + 黄色背景\n- 粗体 + 紫色文字\n- 斜体 + 绿色高亮\n\n> 💡 **使用提示**：选择文字 → 点击 A 图标选择文字颜色 → 点击荧光笔图标选择背景色 → 可叠加基础格式！\n\n### 📋 测试步骤：\n\n1. **基础格式**：粗体、斜体、下划线、删除线独立使用 ✅\n2. **文字颜色**：选择文字 → A 图标 → 选择颜色\n3. **背景高亮**：选择文字 → 荧光笔图标 → 选择背景色\n4. **自由组合**：同时应用多种样式\n5. **视图验证**：JSON 视图查看样式数据结构\n\n\`\`\`javascript\n// 模块化样式系统\nconsole.log("样式系统重构完成！");\nfunction combineStyles() {\n  return {\n    basic: ["bold", "italic", "underline", "strike"],\n    colors: { text: "color", background: "highlight" }\n  };\n}\n\`\`\`\n\n---\n\n**体验模块化样式系统！** 🌟 [TipTap扩展](https://tiptap.dev/extensions) | \`基础样式 + 颜色分离\`\n    `,
+    content: `<h1>🎨 TipTap v3 增强编辑器</h1><h2>📝 新功能展示</h2><p>这是一个包含 <strong>粗体</strong>、<em>斜体</em>、<u>下划线</u> 和 <s>删除线</s> 的段落。</p><h3>✨ 全新功能</h3><p><strong>基础样式工具</strong>：</p><ul><li><strong>粗体</strong> (Bold)</li><li><em>斜体</em> (Italic)</li><li><u>下划线</u> (Underline)</li><li><s>删除线</s> (Strike)</li></ul><p><strong>高级功能</strong>：</p><ul><li>📊 <strong>表格支持</strong> - 插入和编辑表格</li><li>🖼️ <strong>图片上传</strong> - 拖拽或粘贴图片</li><li>🔗 <strong>链接管理</strong> - 添加和编辑超链接</li><li>🎨 <strong>颜色工具</strong> - 文字颜色和背景高亮</li></ul><blockquote><p>💡 <strong>提示</strong>：尝试插入表格、上传图片，体验全新的编辑功能！</p></blockquote><pre><code class="language-javascript">// TipTap v3 示例代码
+console.log("欢迎使用增强编辑器！");
+function demo() {
+  return "所见即所得";
+}</code></pre><hr><p><strong>开始创作吧！</strong> 🚀</p>`,
     onUpdate: ({ editor: currentEditor }) => {
-      if (currentEditor.storage?.markdown) {
-        setMarkdownSource(currentEditor.storage.markdown.getMarkdown());
-      }
       setEditorJson(currentEditor.getJSON() as ProseMirrorNode);
     },
   });
 
   useEffect(() => {
     if (editor?.isEditable) {
-      if (editor.storage?.markdown) {
-        setMarkdownSource(editor.storage.markdown.getMarkdown());
-      }
       setEditorJson(editor.getJSON() as ProseMirrorNode);
     }
   }, [editor]);
-
-  useEffect(() => {
-    if (editor && !editor.isDestroyed && viewMode === 'markdown') {
-      if (markdownSource !== editor.storage.markdown.getMarkdown()) {
-        editor.commands.setContent(markdownSource, false);
-      }
-    }
-  }, [markdownSource, viewMode, editor]);
 
   // Close color pickers when clicking outside
   useEffect(() => {
@@ -183,22 +184,8 @@ const CmsPlaygroundPage: React.FC = () => {
     }
   }, [showTextColorPicker, showHighlightPicker]);
 
-  const handleMarkdownChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMarkdownSource(event.target.value);
-    if (editor && !editor.isDestroyed && viewMode === 'markdown') {
-      editor.commands.setContent(event.target.value, false);
-    }
-  };
-
-  const handleViewChange = (newMode: 'wysiwyg' | 'markdown' | 'json') => {
+  const handleViewChange = (newMode: 'wysiwyg' | 'json') => {
     if (!editor || editor.isDestroyed) return;
-    if (viewMode === 'markdown' && newMode === 'wysiwyg') {
-      editor.commands.setContent(markdownSource, false);
-    } else if (viewMode !== 'markdown' && newMode === 'markdown') {
-      if (editor.storage?.markdown) {
-        setMarkdownSource(editor.storage.markdown.getMarkdown());
-      }
-    }
     setViewMode(newMode);
   };
 
@@ -224,16 +211,45 @@ const CmsPlaygroundPage: React.FC = () => {
     setShowHighlightPicker(false);
   };
 
-  const handleSave = () => {
-    console.log("Saving content:");
-    console.log("Title:", title);
-    if (editor && editor.storage?.markdown) {
-      console.log("Content Markdown (from editor storage):", editor.storage.markdown.getMarkdown());
-    } else {
-      console.log("Content Markdown (from state, editor storage not available):", markdownSource);
+  // Table functions
+  const insertTable = () => {
+    if (!editor) return;
+    editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
+  };
+
+  // Image functions
+  const addImage = () => {
+    const url = window.prompt('输入图片 URL:');
+    if (url && editor) {
+      editor.chain().focus().setImage({ src: url }).run();
     }
-    console.log("Content JSON (from editor storage):", editorJson);
-    alert('Content logged to console!');
+  };
+
+  // Link functions
+  const setLink = () => {
+    if (!editor) return;
+    const previousUrl = editor.getAttributes('link').href;
+    const url = window.prompt('输入链接 URL:', previousUrl);
+
+    if (url === null) return;
+
+    if (url === '') {
+      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+      return;
+    }
+
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+  };
+
+  const handleSave = () => {
+    // TODO: 实现实际的保存功能，调用后端 API
+    // const payload = {
+    //   title,
+    //   content_json: editorJson,
+    //   content_html: editor?.getHTML(),
+    // };
+    // await savePost(payload);
+    alert('内容已保存（模拟）！');
   };
 
   if (!editor) {
@@ -302,6 +318,19 @@ const CmsPlaygroundPage: React.FC = () => {
 
         <ToolbarButton title="Code Block" onClick={() => editor.chain().focus().toggleCodeBlock().run()} isActive={editor.isActive('codeBlock')} disabled={!editor.can().toggleCodeBlock() || viewMode !== 'wysiwyg'}>
           <CodeBlockIcon size={18} />
+        </ToolbarButton>
+
+        <div className="h-5 w-px bg-slate-300 dark:bg-slate-600 mx-1"></div> {/* Separator */}
+
+        {/* Table, Image, Link tools */}
+        <ToolbarButton title="Insert Table" onClick={insertTable} disabled={viewMode !== 'wysiwyg'}>
+          <TableIcon size={18} />
+        </ToolbarButton>
+        <ToolbarButton title="Insert Image" onClick={addImage} disabled={viewMode !== 'wysiwyg'}>
+          <ImageIcon size={18} />
+        </ToolbarButton>
+        <ToolbarButton title="Insert/Edit Link" onClick={setLink} isActive={editor.isActive('link')} disabled={viewMode !== 'wysiwyg'}>
+          <LinkIcon size={18} />
         </ToolbarButton>
 
         <div className="h-5 w-px bg-slate-300 dark:bg-slate-600 mx-1"></div> {/* Separator */}
@@ -388,30 +417,19 @@ const CmsPlaygroundPage: React.FC = () => {
           <ToolbarButton title="WYSIWYG Editor" onClick={() => handleViewChange('wysiwyg')} isActive={viewMode === 'wysiwyg'}>
             <FileTextIcon size={18}/>
           </ToolbarButton>
-          <ToolbarButton title="Markdown Source" onClick={() => handleViewChange('markdown')} isActive={viewMode === 'markdown'}>
-            <TerminalIcon size={18}/>
-          </ToolbarButton>
           <ToolbarButton title="View JSON (Dev)" onClick={() => handleViewChange('json')} isActive={viewMode === 'json'}>
             <EyeIcon size={18}/>
           </ToolbarButton>
         </div>
       </div>
 
-      <div 
-        style={editorAndSourceViewContainerStyle} 
+      <div
+        style={editorAndSourceViewContainerStyle}
         className="flex-grow dark:bg-slate-700/30 dark:border-slate-700 rounded-b-md shadow-inner"
       >
         {viewMode === 'wysiwyg' && <EditorContent editor={editor} className="h-full" />}
-        {viewMode === 'markdown' && (
-          <textarea 
-            value={markdownSource} 
-            onChange={handleMarkdownChange} 
-            style={sourceViewStyle}
-            className="w-full h-full block bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 p-4 focus:outline-none focus:ring-0"
-          />
-        )}
         {viewMode === 'json' && (
-          <pre style={jsonDebugStyle} className="dark:bg-slate-900 dark:text-slate-300 h-full"><code>{editorJson ? JSON.stringify(editorJson, null, 2) : 'Loading JSON...'}</code></pre>
+          <pre style={jsonDebugStyle} className="dark:bg-slate-900 dark:text-slate-300 h-full overflow-auto"><code>{editorJson ? JSON.stringify(editorJson, null, 2) : 'Loading JSON...'}</code></pre>
         )}
       </div>
 

@@ -9,8 +9,8 @@ const EditorSandboxPage: React.FC = () => {
 
   const handleSave = (json: object, html: string) => {
     setSavedContent({ json, html });
-    console.log('保存的内容:', { json, html });
-    alert('内容已保存！查看控制台获取详细信息。');
+    // 内容已保存，显示在下方的预览区
+    alert('内容已保存！查看下方的预览区域获取详细信息。');
   };
 
   const initialContent = `

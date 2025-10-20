@@ -14,16 +14,41 @@ export interface LinkDialogProps {
 const LinkDialog: React.FC<LinkDialogProps> = ({ isOpen, onClose, onInsert, initialText = '' }) => {
   const [url, setUrl] = useState('');
   const [text, setText] = useState(initialText);
+  const [error, setError] = useState('');
 
   if (!isOpen) return null;
 
-  const handleInsert = () => {
-    if (url.trim()) {
-      onInsert(url.trim(), text.trim() || undefined);
-      setUrl('');
-      setText('');
-      onClose();
+  /**
+   * 验证 URL 是否有效且安全
+   * 只允许 http, https, mailto 协议
+   */
+  const validateUrl = (urlString: string): boolean => {
+    try {
+      const parsed = new URL(urlString);
+      return ['http:', 'https:', 'mailto:'].includes(parsed.protocol);
+    } catch {
+      return false;
     }
+  };
+
+  const handleInsert = () => {
+    const trimmedUrl = url.trim();
+
+    if (!trimmedUrl) {
+      setError('请输入 URL');
+      return;
+    }
+
+    if (!validateUrl(trimmedUrl)) {
+      setError('无效的 URL（仅支持 HTTP/HTTPS/mailto 协议）');
+      return;
+    }
+
+    onInsert(trimmedUrl, text.trim() || undefined);
+    setUrl('');
+    setText('');
+    setError('');
+    onClose();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -52,17 +77,29 @@ const LinkDialog: React.FC<LinkDialogProps> = ({ isOpen, onClose, onInsert, init
 
         {/* 内容区 */}
         <div className="p-4 space-y-4">
+          {error && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">
+              {error}
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">链接 URL</label>
             <input
               type="url"
               value={url}
-              onChange={(e) => setUrl(e.target.value)}
+              onChange={(e) => {
+                setUrl(e.target.value);
+                setError(''); // 清除错误提示
+              }}
               onKeyDown={handleKeyDown}
               placeholder="https://example.com"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               autoFocus
             />
+            <p className="mt-1 text-xs text-gray-500">
+              支持 HTTP、HTTPS 和 mailto 协议
+            </p>
           </div>
 
           <div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Upload } from 'lucide-react';
+import { EDITOR_CONFIG, formatFileSize } from '@/config/editor';
 
 export interface ImageDialogProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ const ImageDialog: React.FC<ImageDialogProps> = ({ isOpen, onClose, onInsert }) 
   const [url, setUrl] = useState('');
   const [alt, setAlt] = useState('');
   const [tab, setTab] = useState<'url' | 'upload'>('url');
+  const [error, setError] = useState('');
 
   if (!isOpen) return null;
 
@@ -28,16 +30,40 @@ const ImageDialog: React.FC<ImageDialogProps> = ({ isOpen, onClose, onInsert }) 
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      // 这里应该上传到服务器，暂时使用 Data URL 作为演示
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const dataUrl = event.target?.result as string;
-        setUrl(dataUrl);
-        setTab('url'); // 切换到 URL 标签页显示预览
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    // 重置错误状态
+    setError('');
+
+    // 验证文件类型
+    if (!EDITOR_CONFIG.image.allowedTypes.includes(file.type)) {
+      setError(
+        `不支持的文件格式。仅支持 ${EDITOR_CONFIG.image.allowedExtensions.join(', ').toUpperCase()}`
+      );
+      return;
     }
+
+    // 验证文件大小
+    if (file.size > EDITOR_CONFIG.image.maxSize) {
+      setError(
+        `文件过大。最大支持 ${formatFileSize(EDITOR_CONFIG.image.maxSize)}，当前文件 ${formatFileSize(file.size)}`
+      );
+      return;
+    }
+
+    // 文件验证通过，读取为 Data URL
+    // 注意：生产环境应该上传到服务器
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      setUrl(dataUrl);
+      setAlt(file.name.replace(/\.[^/.]+$/, '')); // 使用文件名作为默认 alt
+      setTab('url'); // 切换到 URL 标签页显示预览
+    };
+    reader.onerror = () => {
+      setError('文件读取失败，请重试');
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -90,6 +116,12 @@ const ImageDialog: React.FC<ImageDialogProps> = ({ isOpen, onClose, onInsert }) 
 
         {/* 内容区 */}
         <div className="p-4">
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">
+              {error}
+            </div>
+          )}
+
           {tab === 'url' ? (
             <div className="space-y-4">
               <div>
@@ -141,10 +173,13 @@ const ImageDialog: React.FC<ImageDialogProps> = ({ isOpen, onClose, onInsert }) 
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition">
                 <Upload className="mx-auto mb-4 text-gray-400" size={48} />
                 <p className="text-sm text-gray-600 mb-2">点击或拖拽图片到这里上传</p>
-                <p className="text-xs text-gray-500 mb-4">支持 JPG, PNG, GIF, WebP (最大 5MB)</p>
+                <p className="text-xs text-gray-500 mb-4">
+                  支持 {EDITOR_CONFIG.image.allowedExtensions.join(', ').toUpperCase()} (最大{' '}
+                  {formatFileSize(EDITOR_CONFIG.image.maxSize)})
+                </p>
                 <input
                   type="file"
-                  accept="image/*"
+                  accept={EDITOR_CONFIG.image.allowedTypes.join(',')}
                   onChange={handleFileChange}
                   className="hidden"
                   id="file-upload"
