@@ -67,9 +67,34 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor }) => {
 
   const Divider = () => <div className="w-px h-8 bg-gray-300 mx-2" />;
 
+  /**
+   * 验证 URL 是否有效且安全
+   * 只允许 http, https, mailto 协议，防止 javascript: 等危险协议
+   */
+  const isValidUrl = (url: string): boolean => {
+    try {
+      const parsed = new URL(url);
+      return ['http:', 'https:', 'mailto:'].includes(parsed.protocol);
+    } catch {
+      return false;
+    }
+  };
+
   const handleInsertLink = (url: string, text?: string) => {
+    // 验证 URL 安全性
+    if (!isValidUrl(url)) {
+      alert('请输入有效的 HTTP/HTTPS/mailto URL');
+      return;
+    }
+
+    // 使用安全的 TipTap API，避免 XSS 攻击
     if (text) {
-      editor.chain().focus().insertContent(`<a href="${url}">${text}</a>`).run();
+      editor
+        .chain()
+        .focus()
+        .insertContent({ type: 'text', text })
+        .setLink({ href: url })
+        .run();
     } else {
       editor.chain().focus().setLink({ href: url }).run();
     }
