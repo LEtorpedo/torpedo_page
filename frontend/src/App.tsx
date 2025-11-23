@@ -11,10 +11,10 @@ import DashboardLayout from './layouts/DashboardLayout';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import AcademicPage from './pages/AcademicPage';
-// import AdminDashboardPage from './pages/AdminDashboardPage'; // 这个不再直接使用，被 DashboardOverviewPage 替代
-import AdminLoginPage from './pages/AdminLoginPage';
-import BlogDetailPage from './pages/BlogDetailPage';
-import BlogListPage from './pages/BlogListPage';
+import AdminDashboardPage from './pages/admin/AdminDashboardPage';
+import AdminLoginPage from './pages/admin/AdminLoginPage';
+import BlogDetailPage from './pages/blog/BlogDetailPage';
+import BlogListPage from './pages/blog/BlogListPage';
 import ContactPage from './pages/ContactPage';
 import EditorSandboxPage from './pages/dev/EditorSandboxPage';
 import NotFoundPage from './pages/NotFoundPage';

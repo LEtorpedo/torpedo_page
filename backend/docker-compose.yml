@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # 后端 API 服务
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=true
+      - DATABASE_URL=sqlite:///./blog.db
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - ADMIN_PASSWORD=admin123
+    volumes:
+      - ./app:/app/app:ro
+      - ./data:/app/data
+    depends_on:
+      - db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 数据库服务 (可选，用于 PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: torpedo_blog
+      POSTGRES_USER: torpedo
+      POSTGRES_PASSWORD: torpedo_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U torpedo"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis 缓存 (可选)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+  redis_data: 

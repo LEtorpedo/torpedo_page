@@ -1,0 +1,66 @@
+# Docker ignore file
+# 排除不需要打包到镜像中的文件
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# 开发文件
+.env
+.env.local
+.env.development
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 版本控制
+.git/
+.gitignore
+
+# 测试和覆盖率
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# 文档
+*.md
+docs/
+
+# 日志
+*.log
+
+# 数据库文件 (开发用)
+*.db
+*.sqlite
+*.sqlite3
+
+# 临时文件
+*.tmp
+*.temp
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# 开发脚本
+scripts/dev.py
+Makefile
+
+# 示例文件
+env.example
+
+# 测试文件
+test_*.py
+*_test.py
+tests/ 

@@ -5,7 +5,7 @@ Designed for personal blog with potential for guest authors.
 
 from datetime import datetime
 from typing import Optional
-from sqlalchemy import Column, String, Text, Boolean, DateTime
+from sqlalchemy import Column, String, Text, Boolean, DateTime, Integer
 from sqlalchemy.orm import relationship
 from passlib.context import CryptContext
 from .base import Base
@@ -143,7 +143,7 @@ class BackendUser(Base):
     )
     
     post_count = Column(
-        "post_count",
+        Integer,
         default=0,
         nullable=False,
         doc="Number of published posts by this author (denormalized)"

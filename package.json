@@ -1,0 +1,26 @@
+{
+  "name": "torpedo-blog",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Torpedo Blog & Personal Hub - React + FastAPI",
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && uv run uvicorn app.main:app --reload --port 8000",
+    "dev:backend:make": "cd backend && make serve",
+    "build:frontend": "cd frontend && npm run build",
+    "install:frontend": "cd frontend && npm install",
+    "install:backend": "cd backend && uv sync --all-extras",
+    "setup:backend": "cd backend && make setup",
+    "lint:frontend": "cd frontend && npm run lint",
+    "format:frontend": "cd frontend && npm run format:fix"
+  },
+  "keywords": [
+    "blog",
+    "react",
+    "fastapi",
+    "tiptap"
+  ],
+  "author": "",
+  "license": "MIT"
+}
+

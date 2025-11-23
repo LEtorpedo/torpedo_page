@@ -1,0 +1,45 @@
+# Torpedo Blog Backend Dependencies
+# Generated from pyproject.toml for conda compatibility
+
+# Web framework
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+
+# Database  
+sqlalchemy>=2.0.23
+alembic>=1.12.1
+
+# Pydantic for data validation
+pydantic[email]>=2.5.0
+pydantic-settings>=2.1.0
+
+# Authentication & Security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.6
+
+# Content processing
+markdown>=3.5.1
+python-frontmatter>=1.0.1
+
+# HTTP client for external APIs
+httpx>=0.25.2
+
+# CORS support (Note: should be python-cors, but using fastapi built-in)
+# python-cors>=1.7.0  # This package doesn't exist, we'll use FastAPI's CORS
+
+# Environment management
+python-dotenv>=1.0.0
+
+# Date/time handling
+python-dateutil>=2.8.2
+
+# Development dependencies (optional)
+pytest>=7.4.3
+pytest-asyncio>=0.21.1
+pytest-cov>=4.1.0
+black>=23.11.0
+isort>=5.12.0
+flake8>=6.1.0
+mypy>=1.7.1
+pre-commit>=3.5.0 

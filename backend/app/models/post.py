@@ -4,7 +4,7 @@ Post model for blog articles.
 
 from datetime import datetime
 from typing import Optional, Dict, Any, List
-from sqlalchemy import Column, String, Text, Boolean, ForeignKey, Table, JSON
+from sqlalchemy import Column, String, Text, Boolean, ForeignKey, Table, JSON, Integer, DateTime
 from sqlalchemy.orm import relationship
 from .base import Base
 
@@ -88,31 +88,44 @@ class Post(Base):
     )
     
     published_at = Column(
-        "published_at",
+        DateTime(timezone=True),
         nullable=True,
         doc="Publication timestamp (null for drafts)"
     )
     
     # Analytics and engagement
     view_count = Column(
-        "view_count",
+        Integer,
         default=0,
         nullable=False,
         doc="Number of times the post has been viewed"
     )
     
     reading_time_minutes = Column(
-        "reading_time_minutes",
+        Integer,
         nullable=True,
         doc="Estimated reading time in minutes"
     )
     
     # Relationships
+    author_id = Column(
+        ForeignKey('backend_user.id'),
+        nullable=False,
+        index=True,
+        doc="Author of the post (required)"
+    )
+    
     category_id = Column(
         ForeignKey('category.id'),
         nullable=True,
         index=True,
         doc="Associated category (optional)"
+    )
+    
+    author = relationship(
+        "BackendUser",
+        back_populates="posts",
+        doc="Post author relationship"
     )
     
     category = relationship(
