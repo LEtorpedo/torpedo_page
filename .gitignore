@@ -14,21 +14,30 @@ frontend/yarn.lock
 frontend/pnpm-lock.yaml     
 
 # Python (Backend)
-backend/__pycache__/
-backend/*.py[cod]
-backend/*$py.class
+# Python 字节码缓存文件（所有目录）
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Python 虚拟环境
+venv/
+.venv/
+env/
+ENV/
+env.bak
+venv.bak
+
+# Python 缓存和工具
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.pytype/
+
+# 环境变量文件
 backend/.env
-backend/venv/
-backend/.venv/
-backend/env/
-backend/.env
-backend/ENV/
-backend/env.bak
-backend/venv.bak
-backend/.pytest_cache/
-backend/.mypy_cache/
-backend/.ruff_cache/
-backend/.hypothesis/
+backend/.env.*
 
 # Operating System generated files
 .DS_Store
