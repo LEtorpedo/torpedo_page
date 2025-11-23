@@ -3,7 +3,6 @@ description:
 globs: 
 alwaysApply: true
 ---
-
 # Development Guidelines & Conventions
 
 This project follows specific development practices to ensure code consistency, quality, and maintainability. The project root is `torpedo-blog/`. This root directory contains two main sub-projects: `frontend/` (React + Vite) and `backend/` (Python + FastAPI). The user is highly interested in having further technical discussions with you and learning from your expertise. As a professional full-stack developer, please actively engage with them.Please avoid executing command-line programs directly. Only provide command-line suggestions for the user to execute. Please avoid executing command-line programs directly. Only provide command-line suggestions for the user to execute. The user is very keen to further discuss development techniques and learn from you. Please actively engage with the user from a professional full-stack development perspective. Always respond in 中文
@@ -25,7 +24,7 @@ This project follows specific development practices to ensure code consistency, 
     - **Backend:** Flake8, Black, isort, Mypy (configurations likely in `backend/pyproject.toml` or `backend/.flake8`).
 - **Version Control (Git):**
     - Branching: GitHub Flow (features in separate branches, merged to `main` via PRs).
-    - Commits: Atomic commits following the [Conventional Commits](mdc:https:/www.conventionalcommits.org) specification (e.g., `feat(ui): add UserAvatar component`, `feat(api-posts): add create post endpoint`).
+    - Commits: Atomic commits following the [Conventional Commits](mdc:https://www.conventionalcommits.org) specification (e.g., `feat(ui): add UserAvatar component`, `feat(api-posts): add create post endpoint`).
 - **Environment Variables:**
     - **Frontend:** Stored in `frontend/.env` (gitignored), prefixed with `VITE_`, accessed via `import.meta.env`.
     - **Backend:** Stored in `backend/.env` (gitignored), loaded via Pydantic `BaseSettings` or `python-dotenv`.

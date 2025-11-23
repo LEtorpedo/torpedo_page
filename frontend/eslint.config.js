@@ -24,6 +24,8 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      // 生产环境禁止 console.log，开发环境警告
+      'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     },
   },
   eslintConfigPrettier,

@@ -1,5 +1,40 @@
 # 个人博客设计草案
 
+## 0. 当前实施状态与下一步重点
+
+### 0.1. 已完成的核心基础
+- ✅ **前端技术栈完整搭建**：React + Vite + TypeScript + Tailwind CSS
+- ✅ **首页 Bento Grid 布局**：Hero Section, 自我介绍, 项目精选, 社交链接等
+- ✅ **TipTap 编辑器技术验证**：自定义 StyledTextMark 扩展已实现，支持 styleKey 样式系统
+- ✅ **基础页面结构**：路由系统和页面占位符已完成
+- ✅ **管理后台框架**：Dashboard 布局结构已搭建
+
+### 0.2. 当前实施重点与优先级
+
+**🎯 Phase 1 - TipTap 编辑器系统完善 (当前焦点)**
+1. **编辑器核心功能迁移**：将 EditorSandboxPage 的验证逻辑迁移到 CmsPlaygroundPage
+2. **ContentRenderer 完善**：实现完整的 JSON 到 React 组件的渲染管道
+3. **工具栏功能扩展**：实现可视化工具栏，支持全面的 Markdown 格式化
+4. **预览系统优化**：实现 WYSIWYG / Markdown 源码 / JSON 三视图切换
+
+**🚀 Phase 2 - 后端 API 开发 (并行启动)**
+1. **FastAPI 项目初始化**：项目结构、依赖管理、基础配置
+2. **数据模型设计**：基于前端编辑器的 JSON 输出优化数据库设计
+3. **博客 CRUD API**：文章、分类、标签的 REST API
+4. **动态样式文本 API**：支持 styleKey 的结构化文本存储与检索
+
+**📝 Phase 3 - 博客功能实现**
+1. **文章列表页**：网格布局、筛选、分页
+2. **文章详情页**：Markdown 渲染、目录、相关推荐
+3. **数据流整合**：前后端数据交互完整对接
+
+### 0.3. 技术决策确认
+- **Markdown 编辑器**：TipTap (已确认，基于 ProseMirror，高度可定制)
+- **样式系统**：styleKey 映射模式 (已实现，支持 normal/cursive_main/highlight_important)
+- **后端框架**：FastAPI + SQLAlchemy + Alembic
+- **数据库**：SQLite (开发阶段)
+- **部署方案**：前端 Vercel/Netlify，后端待定
+
 ## 1. 核心目标与技术选型
 
 ### 1.1. 核心目标
@@ -149,15 +184,49 @@
 
 ### 4.2. 布局
 
-- **结构:** 典型仪表盘布局: 左侧固定导航 + 主内容区。
-- **左侧导航:** 使用自定义的 React 垂直导航组件 (例如 `VerticalNavigation`，可基于 Headless UI Disclosure/Menu 或自行实现)，链接至各模块。
-- **主内容区:** 根据导航选择动态加载对应模块界面 (使用 React Router)。
+- **结构:** 采用类似 Discord 的界面布局，左侧为可定制、可收起的垂直工具导航栏，右侧为主内容区。
+- **左侧导航栏 (工具选择区):**
+    - **显示与交互:** 
+        - **展开状态:** 显示清晰的图标和工具名称。
+        - **收起状态:** 仅显示图标（鼠标悬停可显示完整名称的 Tooltip），为右侧主内容区提供更大空间。
+        - **切换方式:** 提供手动操作按钮（例如，使用 Chevron 图标）进行侧边栏的展开与收起，并伴有平滑过渡动画。
+    - **个性化与效率:**
+        - **工具置顶:** 允许用户将常用工具固定到导航栏顶部。
+        - **最近使用排序:** 非置顶工具可根据最近使用情况动态排序，方便快速访问。
+    - **工具"作用域"/启动选项:** (当侧边栏展开时) 点击或悬停工具项时，可通过展开栏（子菜单）或快捷菜单，允许用户在进入工具前选择特定的作用域或初始设置（例如，CMS 的内容类型，RSS 阅读器的特定文件夹等）。
+- **主内容区 (工具 Playground / 工作区):**
+    - 当用户从左侧选择一个工具（并可能选定了其作用域）后，主内容区将加载该工具专属的、高度交互的"Playground"界面。
+    - 此区域是实现各工具独特交互和"惊艳"体验的核心。
 
 ### 4.3. 文章编辑器
 
-- **核心:** 集成强大的 Markdown 编辑器 (React 版本，如 `Milkdown`, `BlockNote`, `TipTap` 或其他支持 Markdown 的富文本编辑器)。选型时重点关注其定制性、React集成友好度、插件生态，以及对实现个性化功能（如自定义字体选择、Emoji表情集成）的支持程度，力求达到“惊艳”的编辑体验。
-- **元数据管理:** 结合 React 表单库 (如 `React Hook Form`) 和自定义 React 输入组件 (基于 Headless UI 或 shadcn/ui 的 input, select, textarea 等) 管理文章元数据。
-- **体验优化:** 宽敞布局 (全屏/收起侧边栏选项), 实时预览, 图片上传集成, 自动保存等。
+- **核心:** 使用 **TipTap v3** 作为富文本编辑器（基于 ProseMirror，高度可定制，React 集成友好）。
+- **布局设计 :**
+    - **两栏布局:** 左侧为编辑器输入区，右侧为工具栏集合
+    - **左侧编辑器区:** 包含标题输入框和 TipTap 编辑器内容区，使用 `prose` 类确保排版美观
+    - **右侧工具栏区:** 垂直排列的工具栏按钮组，按功能分组（撤销/重做、标题、文本样式、列表/引用、插入元素、颜色工具等）
+- **视觉风格:**
+    - **色系:** 统一使用 `slate` 色系，与 DashboardLayout 保持一致
+    - **工具栏背景:** `bg-slate-800 dark:bg-slate-900`
+    - **编辑器背景:** `bg-white dark:bg-slate-800`
+    - **按钮激活状态:** `bg-sky-600 text-white`（与 DashboardLayout 的激活状态一致）
+    - **圆角:** 统一使用 `rounded-md` (6px)
+    - **阴影:** 工具栏使用 `shadow-lg`，内容区使用 `shadow-inner`
+- **用户界面与交互:**
+    - **可视化工具栏:** 提供直观易用的图形化工具栏，包含常用格式化选项（加粗、斜体、列表、引用、代码块、链接、图片上传等）以及自定义样式（如 `styleKey`）的应用按钮/菜单，方便不熟悉快捷键的用户。
+    - **键盘快捷方式:** 支持高效的键盘操作，包括 Tiptap 内置的标准 Markdown 快捷键以及为自定义功能（如应用 `styleKey`）绑定的快捷键。
+    - **(可选考虑) 斜杠命令 (Slash Commands):** 探索集成斜杠命令，允许用户通过输入 `/` 快速调用常用功能和插入元素。
+- **预览机制:**
+    - **实时预览:** TipTap 编辑器本身提供 WYSIWYG 编辑体验，无需额外的预览区
+    - **调试视图 (可选):** 保留 JSON 视图用于开发调试，但不作为主要功能展示
+    - **导出功能:** 支持导出为 Markdown 或 HTML 格式（用于下载或备份）
+- **元数据管理:** 结合 React 表单库 (如 `React Hook Form`) 和自定义 React 输入组件 (基于 Headless UI 或 shadcn/ui 的 input, select, textarea 等) 管理文章元数据（标题、分类、标签、发布时间等）。
+- **体验优化:** 
+    - 自动保存（本地存储 + 后端同步）
+    - 草稿管理
+    - 图片上传集成
+    - 字符计数和阅读时间估算
+    - 全屏编辑模式（可选）
 
 ### 4.3.1. (新增) 支持可自定义样式的动态文本内容
 
@@ -179,55 +248,73 @@
 - **CRUD 操作:** 对分类、标签等使用 React 表单库和自定义 React 组件，结合自定义模态框组件 (基于 Headless UI `Dialog` 实现) 或独立页面进行管理。
 - **工具界面:** RSS 阅读器、待办事项等工具需设计各自的列表视图和操作界面，充分利用自定义 React 组件。
 
-## 5. Markdown 渲染 (前端)
+## 5. 内容渲染 (前端)
 
-- **主要策略:** 使用 React 生态中的 Markdown 解析和渲染库。
-    - **推荐库:** `react-markdown` 是一个流行的选择，它允许使用 Remark 和 Rehype 插件生态系统。
-    - **功能:**
-        - **Markdown 解析:** 将 Markdown 文本转换为 AST (Abstract Syntax Tree)。
-        - **HTML 渲染:** 将 AST 渲染为 React 组件/HTML 元素。
-        - **组件覆盖:** 允许用自定义 React 组件替换标准的 HTML 标签 (e.g., 自定义 `<a>`, `<img>`, `<code>` 等的渲染方式)。
+- **主要策略:** 
+    - **TipTap JSON 渲染:** 编辑器输出的 ProseMirror JSON 数据通过自定义 `ContentRenderer` 组件渲染为 React 组件。
+    - **Markdown 渲染 (可选):** 如果需要渲染 Markdown 文本，可使用 `react-markdown` 库，它允许使用 Remark 和 Rehype 插件生态系统。
+- **TipTap JSON 渲染实现:**
+    - **ContentRenderer 组件:** 递归解析 ProseMirror JSON 节点，转换为对应的 React 元素。
+    - **支持的节点类型:** 段落、标题、列表、引用、代码块、链接、图片、表格等。
+    - **样式应用:** 通过 Tailwind CSS 类名和自定义样式应用视觉效果。
 - **样式与排版:**
-    - **Tailwind CSS:** 主要通过 Tailwind CSS 直接样式化或使用 `@tailwindcss/typography` 插件为 Markdown 内容提供美观且一致的基本样式。
+    - **Tailwind CSS:** 使用 `@tailwindcss/typography` 插件的 `prose` 类为内容提供美观且一致的基本样式。
     - **自定义样式:** 结合自定义 Tailwind CSS 规则进一步调整样式细节。
-    - **字体:** 确保排版样式使用我们在 2.1 节选定的主字体。
+    - **字体:** 确保排版样式使用我们在 2.1 节选定的主字体（Noto Serif SC）。
 - **代码高亮:**
-    - 通过 `react-markdown` 的 Rehype 插件集成代码高亮库，例如:
-        - `rehype-highlight` (使用 highlight.js)
-        - `remark-prism` (如果 Remark 插件更适用，但通常 Rehype 插件用于最终渲染阶段)
-        - 或其他兼容的语法高亮插件。
+    - 对于代码块，使用 `lowlight` 库（TipTap 已集成）进行语法高亮。
     - 配置偏好的代码高亮主题，并可通过 CSS 微调样式。
 - **目录生成 (TOC):**
-    - TOC 数据可以由后端 API 在处理 Markdown 时预先生成并提供。
-    - 或者，可以在前端使用 Remark/Rehype 插件 (如 `remark-toc` 或自定义逻辑) 从 Markdown 内容动态生成 TOC 数据。
+    - TOC 数据可以由后端 API 在处理内容时预先生成并提供。
+    - 或者，可以在前端通过解析 ProseMirror JSON 中的 heading 节点动态生成 TOC 数据。
 
 ## 6. 核心数据结构 (示例)
 
-*(注: 以下结构为初步示例，具体字段和实现方式可能根据后端选择和 `@nuxt/content` 配置调整)*
+*(注: 以下结构为初步示例，具体字段和实现方式可能根据后端 FastAPI + SQLAlchemy 模型调整)*
 
-### 6.1. 博客内容结构 (主要基于 `@nuxt/content` front-matter)
+### 6.1. 博客内容结构 (基于 FastAPI 后端数据模型)
 
 ```typescript
-// 文章 (Post) - 主要由 Markdown 文件的 front-matter 定义
-type PostFrontMatter = {
+// 文章 (Post) - 基于后端 SQLAlchemy 模型
+type Post = {
+  id: number;
   title: string;
-  slug: string; // 通常基于文件名自动生成, 需保证 unique
-  publishedAt: Date; // 或者使用 'date' 字段
-  status: 'draft' | 'published'; // 控制是否展示
+  slug: string; // URL-friendly 标识符，需保证 unique
+  content_json: ProseMirrorNode; // TipTap ProseMirror JSON 格式
+  content_markdown?: string; // Markdown 表示（用于导出和备份）
   excerpt?: string; // 文章摘要
-  featuredImage?: string; // 特色图片 URL
-  authorUsername?: string; // 作者用户名 (关联 User)
-  category?: string;       // 单个分类名称/slug
-  categories?: string[];   // 多个分类名称/slug
-  tags?: string[];         // 标签名称列表
+  meta_description?: string; // SEO 元描述
+  featured_image?: string; // 特色图片 URL
+  is_published: boolean; // 发布状态
+  published_at?: Date; // 发布时间
+  view_count: number; // 浏览次数
+  reading_time_minutes?: number; // 预估阅读时间（分钟）
+  author_id: number; // 作者 ID（关联 User）
+  category_id?: number; // 分类 ID（关联 Category）
+  tags?: Tag[]; // 标签列表（多对多关系）
+  created_at: Date;
+  updated_at: Date;
 }
 
-// 在使用 @nuxt/content 查询时，通常会得到包含 front-matter 及其他元数据 (如 _path, _id) 的对象
-// 分类 (Category) 和 标签 (Tag) 在前端通常作为 Post 的属性 (字符串或数组) 使用，
-// 除非后台需要独立的管理功能，否则不一定需要单独的 Category/Tag 数据结构。
+// 分类 (Category) - 独立的数据模型
+type Category = {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  posts?: Post[];
+}
+
+// 标签 (Tag) - 独立的数据模型
+type Tag = {
+  id: number;
+  name: string;
+  slug: string;
+  posts?: Post[];
+}
 ```
 
-### 6.2. 个人工具与用户结构 (示例，可能存储于数据库并通过 Server Routes 访问)
+### 6.2. 个人工具与用户结构 (示例，存储于数据库并通过 FastAPI 后端 API 访问)
 
 ```typescript
 // 用户 (User)
@@ -283,24 +370,25 @@ type TodoItem = {
 1.  **私有工具 (RSS, 待办事项) 具体设计:**
     *   RSS 阅读器: 订阅源管理 (CRUD, 分组), 文章列表 (拉取, 展示, 状态标记, 收藏), 阅读界面策略, 后台自动更新任务, UI/UX 设计。
     -   待办事项: 任务管理 (CRUD, 状态), 视图 (筛选, 排序), 提醒功能 (可选), UI/UX 设计。
-    *   使用的 UI 库主要为 Nuxt UI，可考虑列表动画等细节。
+    *   使用 React + Tailwind CSS 构建 UI，可考虑列表动画等细节（使用 Framer Motion 等库）。
 2.  **评论系统集成方案:**
     *   评估 Giscus, utterances, Disqus 等第三方服务或自建方案。
     *   考虑易用性、隐私性、维护成本、风格契合度。
 3.  **搜索功能实现细节:**
     *   确定搜索范围 (博客文章, 学术主页内容等)。
-    *   选择实现方式 (客户端 `@nuxt/content` API, 服务器端索引如 Algolia, Meilisearch, Typesense, 或数据库全文搜索)。
+    *   选择实现方式 (前端客户端搜索, 后端 API 全文搜索, 或第三方服务如 Algolia, Meilisearch, Typesense)。
     *   设计搜索 UI (输入框, 结果展示)。
 4.  **后端与数据库选择:**
     *   为用户数据、RSS/待办等工具选择持久化存储方案。
     *   评估 Supabase, PocketBase, Prisma + DB (PlanetScale, Neon, Turso, SQLite), Firebase 等选项。
 5.  **用户认证策略:**
     *   选择具体的认证实现方式。
-    *   评估 Nuxt Auth Utils, Supabase Auth, Lucia Auth, Auth.js, 自行实现 JWT 等方案。
+    *   评估自行实现 JWT (FastAPI + python-jose), Supabase Auth, Auth.js 等方案。
     *   考虑安全性与 OAuth 第三方登录。
 6.  **部署策略:**
-    *   选择部署平台 (Vercel, Netlify, Cloudflare Pages 等)。
-    *   确定最终构建模式 (SSG, SSR, Hybrid) 并配置。
+    *   前端: 选择部署平台 (Vercel, Netlify, Cloudflare Pages 等)，使用静态构建 (Vite build)。
+    *   后端: 选择部署平台 (Railway, Render, Fly.io, 或自托管)，使用 FastAPI + Uvicorn。
+    *   CI/CD: 利用平台自带的 CI/CD 功能实现自动化构建和部署。
 7.  **(可选) 媒体管理 (非 Google Drive):**
     *   如需后台上传媒体文件，确定存储方案 (Cloudinary, S3, Vercel Blob 等) 和管理界面。
 8.  **(可选) Google Drive 集成:**
@@ -308,9 +396,9 @@ type TodoItem = {
     *   潜在用途: 托管简历 PDF, 存储项目附件, 嵌入 Google Docs/Slides 等。
     *   需处理 OAuth 认证和文件权限。
 9.  **性能优化细节:**
-    *   具体措施: 图片优化 (`@nuxt/image`), 代码分割, 按需加载, FCP/LCP 优化, Bundle 分析。
+    *   具体措施: 图片优化 (使用现代图片格式, 懒加载), 代码分割 (Vite 自动处理), 按需加载, FCP/LCP 优化, Bundle 分析。
 10. **SEO 深入优化:**
-    *   具体措施: 结构化数据 (Schema.org), Sitemap 生成, Open Graph/Twitter Cards 优化 (`@nuxt/seo` 工具包)。
+    *   具体措施: 结构化数据 (Schema.org), Sitemap 生成 (后端 API 或静态生成), Open Graph/Twitter Cards 优化 (React Helmet 或类似库)。
 11. **可访问性 (A11y) 检查与改进:**
     *   持续关注语义化 HTML, ARIA, 键盘导航, 对比度等。
 
@@ -336,13 +424,15 @@ type TodoItem = {
 
 ## 2. 数据安全
 - **输入验证**:
-    - **客户端与服务器端双重验证**: 对所有用户输入（包括表单提交、URL参数等）进行严格验证，防止如 XSS、CSRF 等常见攻击。推荐使用如 Zod 等库进行结构化验证。
-    - 涉及 `@nuxt/content` 的 Markdown 内容，需注意其渲染过程的安全性，避免注入恶意脚本。
+    - **客户端与服务器端双重验证**: 对所有用户输入（包括表单提交、URL参数等）进行严格验证，防止如 XSS、CSRF 等常见攻击。推荐使用如 Zod (前端) 和 Pydantic (后端) 等库进行结构化验证。
+    - TipTap 编辑器输出的 JSON 内容，需在后端进行验证和净化，避免注入恶意脚本。
 - **输出编码**:
-    - Nuxt/Vue 默认会对模板中的动态数据进行编码。
-    - 谨慎使用 `v-html`，确保内容来源可靠或经过适当净化处理。
+    - React 默认会对 JSX 中的动态数据进行编码，防止 XSS 攻击。
+    - 谨慎使用 `dangerouslySetInnerHTML`，确保内容来源可靠或经过适当净化处理（如使用 DOMPurify）。
 - **敏感信息处理**:
-    - API 密钥、数据库凭证等敏感配置信息必须存储在 `.env` 文件中，并通过 Nuxt 的 `runtimeConfig` 安全地仅供服务器端访问。
+    - API 密钥、数据库凭证等敏感配置信息必须存储在 `.env` 文件中。
+    - 前端环境变量需以 `VITE_` 前缀，通过 `import.meta.env` 访问。
+    - 后端环境变量通过 `python-dotenv` 或 Pydantic `BaseSettings` 加载。
     - `.env` 文件必须加入 `.gitignore`，严禁提交到版本库。
 - **错误信息处理**:
     - 服务器端 API 在发生错误时，应返回通用的、不暴露系统内部细节的错误提示给客户端。详细错误日志记录在服务器端。
@@ -357,7 +447,7 @@ type TodoItem = {
     - 会话管理：使用安全的会话机制，如设置 `HttpOnly` 和 `Secure` 属性的 Cookies。
 - **授权逻辑**:
     - 对需要特定权限才能访问的 API 接口和页面路由，进行明确的授权检查。
-- **CSRF 防护**: 若使用基于 Cookie 的会话管理，需实施有效的 CSRF 防护策略 (如使用 `nuxt-security` 模块提供的功能或同步器模式 Token)。
+- **CSRF 防护**: 若使用基于 Cookie 的会话管理，需实施有效的 CSRF 防护策略（如使用同步器模式 Token 或 SameSite Cookie 属性）。
 
 ## 5. 依赖管理与维护
 - **定期更新**: 定期审查并更新项目依赖（`package.json`），及时修复已知的安全漏洞。可使用 `

@@ -9,9 +9,9 @@ frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
 frontend/pnpm-debug.log*
-# frontend/package-lock.json # 通常建议提交，如果您使用 npm，请取消注释或移除此行以跟踪它
-frontend/yarn.lock          # 如果您使用 yarn
-frontend/pnpm-lock.yaml     # 如果您使用 pnpm
+frontend/package-lock.json 
+frontend/yarn.lock          
+frontend/pnpm-lock.yaml     
 
 # Python (Backend)
 backend/__pycache__/
